@@ -3,3 +3,6 @@ build/
 lib/
 lib64/
 venv/
+.coverage
+coverage.xml
+.coverage_html/

@@ -1,0 +1,9 @@
+[run]
+omit =
+    # potential python virtual env
+    venv/*,
+source = .
+[report]
+exclude_lines =
+    pragma: no cover
+    pass
