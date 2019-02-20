@@ -48,9 +48,15 @@ resource "aws_lambda_function" "lambda_function" {
   description = "Moving some Tasks from A to B."
   function_name = "trello-manager"
   role = "${aws_iam_role.lambda_role.arn}"
-  handler = "trello_manager.lambda_handler"
+  handler = "lambda_handler.lambda_handler"
   runtime = "python3.7"
   timeout = 30
+  environment {
+    variables = {
+      TRELLO_API_KEY = "${var.trello_key}",
+      TRELLO_API_SECRET = "${var.trello_secret}",
+    }
+  }
 }
 
 resource "aws_cloudwatch_event_rule" "scheduled_rule" {

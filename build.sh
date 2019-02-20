@@ -23,9 +23,8 @@ pushd ${ROOT_DIR}
 
 pip install -r requirements.txt
 
-if [ -d tests ]; then
-    venv/bin/nosetests
-fi
+venv/bin/nosetests
+
 
 cp -r ${WORK_DIR}/venv/lib/python3.*/site-packages/* ${TARGET_TMP}
 deactivate
