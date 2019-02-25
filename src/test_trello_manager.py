@@ -10,18 +10,31 @@ from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask
 TEST_BOARD = "UNITTEST"
 
 
-class TestTrelloManager(TestCase):
+class TrelloTest(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.client = TrelloClient(
             api_key=os.environ["TRELLO_API_KEY"],
             api_secret=os.environ["TRELLO_API_SECRET"]
         )
-        cls.board = None
-        for board in cls.client.list_boards():
-            if TEST_BOARD == board.name:
-                cls.board = board
+        cls.board = cls._refresh_test_board(cls.client)
 
+    @classmethod
+    def _refresh_test_board(cls, client):
+        cls._remove_test_board(client)
+        return client.add_board(TEST_BOARD)
+
+    @staticmethod
+    def _remove_test_board(client):
+        board = None
+        for board in client.list_boards():
+            if TEST_BOARD == board.name:
+                break
+        if board:
+            client.fetch_json('boards/{}'.format(board.id), http_method='DELETE')
+
+
+class TestTrelloManager(TrelloTest):
     def setUp(self):
         self.manager = TrelloManager(TEST_BOARD)
 
