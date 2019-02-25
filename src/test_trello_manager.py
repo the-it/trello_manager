@@ -1,5 +1,5 @@
 import os
-from unittest import TestCase
+from unittest import TestCase, skip
 
 from testfixtures import compare
 from trello import TrelloClient
@@ -42,7 +42,8 @@ class TestTrelloManager(TestCase):
     
     
 ShoppingTask._board = TEST_BOARD
-    
+
+@skip
 class TestShoppingTask(TestCase):
     @classmethod
     def setUpClass(cls):

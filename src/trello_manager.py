@@ -1,4 +1,5 @@
 import os
+import pprint
 import typing
 
 from trello import TrelloClient, Board, List, Card
@@ -30,6 +31,7 @@ class TrelloManager:
                 return trello_list
         return None
 
+
 class ShoppingTask:
     _board = "Einkaufen"
 
@@ -39,14 +41,31 @@ class ShoppingTask:
              "Sonstiges": "Sonstiges"}
 
     def __init__(self):
+        self.pp = pprint.PrettyPrinter(indent=4)
         self.manager = TrelloManager(self._board)
         self.lists = self._get_lists()
+
+    def run(self):
+        cards = self._get_archived_cards()
+        self.pp.pprint(cards)
+        self._move_to_category(cards)
+        for list_str in self.lists:  
+            print(f"Sorting list {list_str}")
+            card_list = self.manager.get_list_by_name(f"Gerade nicht kaufen ({list_str})")
+            self._sort_list(card_list)
+
+    def _sort_list(self, card_list: List):
+        cards = card_list.list_cards()
+        self.pp.pprint(cards)
+        cards = sorted(cards, key=lambda list_card: list_card.name.lower())
+        for idx, card in enumerate(cards):
+            card.set_pos(idx + 1)
 
     def _get_archived_cards(self):
         cards = {}
         for key in self.label.values():
             cards[key] = []
-        for card in self.manager.board.get_cards(filters={"filter": "closed"}):
+        for card in self.manager.board.closed_cards():
             if card.labels:
                 for label in card.labels:
                     if label.name in self.label.keys():
@@ -63,15 +82,10 @@ class ShoppingTask:
     def _move_to_category(self, card_dict: typing.Dict[str, typing.List[Card]]):
         for key in card_dict:
             for card in card_dict[key]:
-                #card.change_list(self.lists[key].id)
+                card.change_list(self.lists[key].id)
+                card.set_closed(False)
                 pass
 
 
-
-
-
 if __name__ == "__main__":
-    task = ShoppingTask()
-    cards = task._get_archived_cards()
-    task._move_to_category(cards)
-
+    ShoppingTask().run()

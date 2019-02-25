@@ -50,7 +50,8 @@ resource "aws_lambda_function" "lambda_function" {
   role = "${aws_iam_role.lambda_role.arn}"
   handler = "lambda_handler.lambda_handler"
   runtime = "python3.7"
-  timeout = 30
+  timeout = 120
+  reserved_concurrent_executions = 1
   environment {
     variables = {
       TRELLO_API_KEY = "${var.trello_key}",
