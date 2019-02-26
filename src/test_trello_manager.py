@@ -98,17 +98,22 @@ class TestShoppingTask(TrelloTest):
 
         self.task.run()
 
-        compare(1, len(self.list_drogerie.list_cards()))
-        compare("Test_Item_2", self.list_drogerie.list_cards()[0].name)
-        compare(1, len(self.list_sonstiges.list_cards()))
-        compare("Test_Item_4", self.list_sonstiges.list_cards()[0].name)
-        compare(2, len(self.list_lebensmittel.list_cards()))
-        compare("Test_Item_1", self.list_lebensmittel.list_cards()[0].name)
-        compare("Test_Item_3", self.list_lebensmittel.list_cards()[1].name)
-        compare(1, len(self.buy_list.list_cards()))
-        compare("Show", self.buy_list.list_cards()[0].name)
-        compare(1, len(self.board.closed_cards()))
-        compare("Don't show", self.board.closed_cards()[0].name)
+        drogerie_cards = self.list_drogerie.list_cards()
+        compare(1, len(drogerie_cards))
+        compare("Test_Item_2", drogerie_cards[0].name)
+        sonstige_cards = self.list_sonstiges.list_cards()
+        compare(1, len(sonstige_cards))
+        compare("Test_Item_4", sonstige_cards[0].name)
+        lebensmittel_cards = self.list_lebensmittel.list_cards()
+        compare(2, len(lebensmittel_cards))
+        compare("Test_Item_1", lebensmittel_cards[0].name)
+        compare("Test_Item_3", lebensmittel_cards[1].name)
+        buy_cards = self.buy_list.list_cards()
+        compare(1, len(buy_cards))
+        compare("Show", buy_cards[0].name)
+        closed_cards = self.board.closed_cards()
+        compare(1, len(closed_cards))
+        compare("Don't show", closed_cards[0].name)
 
     def test_sorting(self):
         for category in {(self.list_lebensmittel, self.label_lebensmittel),
