@@ -87,7 +87,7 @@ class TestShoppingTask(TrelloTest):
         self.label_sonstiges = self.board.add_label("Sonstiges", "green")
         self.task = ShoppingTask()
         
-    def testIntegration(self):
+    def test_integration(self):
         self.buy_list.add_card("Test_Item_1", labels=[self.label_lebensmittel])
         self.buy_list.add_card("Test_Item_2", labels=[self.label_drogerie])
         self.buy_list.add_card("Test_Item_3", labels=[self.label_getraenke])
@@ -111,4 +111,18 @@ class TestShoppingTask(TrelloTest):
         compare("Don't show", self.board.closed_cards()[0].name)
 
     def test_sorting(self):
-        pass
+        for category in {(self.list_lebensmittel, self.label_lebensmittel),
+                         (self.list_drogerie, self.label_drogerie),
+                         (self.list_sonstiges, self.label_sonstiges)}:
+            self.buy_list.add_card("Test_Item_4", labels=[category[1]])
+            self.buy_list.add_card("Test_Item_2", labels=[category[1]])
+            self.buy_list.add_card("Test_Item_0", labels=[category[1]])
+            self.buy_list.archive_all_cards()
+
+            self.task.run()
+
+            cards = category[0].list_cards()
+            compare(3, len(cards))
+            compare("Test_Item_0", cards[0].name)
+            compare("Test_Item_2", cards[1].name)
+            compare("Test_Item_4", cards[2].name)
