@@ -11,11 +11,13 @@ class TrelloExecption(Exception):
 
 class TrelloManager:
     _board = None # type: str
+    _key = "TRELLO_API_KEY"
+    _secret = "TRELLO_API_SECRET"
 
     def __init__(self):
         self.client = TrelloClient(
-            api_key=os.environ["TRELLO_API_KEY"],
-            api_secret=os.environ["TRELLO_API_SECRET"]
+            api_key=os.environ[self._key],
+            api_secret=os.environ[self._secret]
         )
         self.board = self._init_board(self._board)
         if not self.board:
