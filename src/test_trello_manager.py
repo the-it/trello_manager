@@ -35,16 +35,23 @@ class TrelloTest(TestCase):
 
 
 class TestTrelloManager(TrelloTest):
+    TrelloManager._board = TEST_BOARD
+
     def setUp(self):
-        self.manager = TrelloManager(TEST_BOARD)
+        self.manager = TrelloManager()
 
     def tearDown(self):
         for trello_list in self.board.get_lists(None):
             trello_list.close()
 
     def test_no_board(self):
+        TrelloManager._board = "Tada"
         with self.assertRaises(TrelloExecption):
-            TrelloManager("TADA")
+            TrelloManager()
+
+        TrelloManager._board = None
+        with self.assertRaises(TrelloExecption):
+            TrelloManager()
 
     def test_get_list_by_name(self):
         self.board.add_list("neue_liste")
