@@ -12,7 +12,6 @@ unittest :
 
 coverage : clean-coverage
 	echo "########### COVERAGE ###########"
-	export PYWIKIBOT2_NO_USER_CONFIG=1 && \
 	venv/bin/nosetests --with-coverage && \
 	coverage xml
 
@@ -28,10 +27,6 @@ coverage-html : coverage
 codecov : 
 	echo "########### CODECOV ############"
 	codecov
-
-codacy :
-	echo "############ CODACY ############"
-	python-codacy-coverage -r coverage.xml
 
 clean : clean-pyc clean-coverage
 

@@ -1,7 +1,7 @@
 [run]
 omit =
     # potential python virtual env
-    venv/*,
+    venv/*
 source = .
 [report]
 exclude_lines =
