@@ -1,4 +1,5 @@
 import os
+from time import sleep
 from unittest import TestCase
 
 from testfixtures import compare
@@ -21,6 +22,7 @@ class TrelloTest(TestCase):
         )
 
     def setUp(self):
+        sleep(10)
         self.board = self._refresh_test_board()
 
     def tearDown(self):
