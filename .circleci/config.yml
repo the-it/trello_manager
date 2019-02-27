@@ -24,14 +24,6 @@ install_dependencies: &install_dependencies
       make pip3
       pip list
 
-run_unittest: &run_unittest
-  run:
-    name: run unittest
-    when: always
-    command: |
-      . venv/bin/activate
-      make unittest
-
 run_coverage: &run_coverage
   run:
     name: run coverage
@@ -44,7 +36,7 @@ report_codecov: &report_codecov
     name: report codecov
     command: |
       . venv/bin/activate
-      codecov -F $PYTHON_VERSION
+      codecov
 
 show_python_version: &show_python_version
   run:
@@ -52,32 +44,19 @@ show_python_version: &show_python_version
     command: |
       python --version
 
-version_steps: &version_steps
-  steps:
-    - checkout
-    - <<: *restore_cache
-    - <<: *show_python_version
-    - <<: *install_dependencies
-    - <<: *save_cache
-    - <<: *run_unittest
-
 coverage_steps: &coverage_steps
   steps:
     - checkout
     - <<: *restore_cache
     - <<: *show_python_version
     - <<: *run_coverage
+    - <<: *install_dependencies
+    - <<: *save_cache
     - <<: *report_codecov
 
 # job definitions
 
 jobs:
-  version37:
-    docker:
-      - image: circleci/python:3.7
-    working_directory: ~/repo
-    <<: *version_steps
-
   coverage37:
     docker:
       - image: circleci/python:3.7
@@ -90,9 +69,5 @@ workflows:
   version: 2
   test:
     jobs:
-      - version37:
-          context: trello
       - coverage37:
           context: trello
-          requires:
-            - version37
