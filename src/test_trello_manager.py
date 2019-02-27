@@ -22,7 +22,9 @@ class TrelloTest(TestCase):
         )
 
     def setUp(self):
-        sleep(10)
+        # this is necessary, because the calls to the api of trello are limited to 100calls/10seconds
+        if "CIRCLECI" in os.environ:
+            sleep(10)
         self.board = self._refresh_test_board()
 
     def tearDown(self):
