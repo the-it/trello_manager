@@ -47,9 +47,10 @@ coverage_steps: &coverage_steps
   steps:
     - checkout
     - <<: *restore_cache
-    - <<: *show_python_version
+    - <<: *install_dependencies
+    - <<: *show_python_version
     - <<: *run_coverage
-    - <<: *install_dependencies
+
     - <<: *save_cache
     - <<: *report_codecov
 
