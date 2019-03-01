@@ -62,7 +62,7 @@ resource "aws_lambda_function" "lambda_function" {
 
 resource "aws_cloudwatch_event_rule" "scheduled_rule" {
   name = "trigger-trello-manager"
-  schedule_expression = "cron(00 23 * * ? *)"
+  schedule_expression = "cron(00 22 * * ? *)"
   is_enabled = true
 }
 

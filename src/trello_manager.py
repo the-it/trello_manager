@@ -1,8 +1,10 @@
 import os
 import pprint
+import re
 import typing
+from datetime import datetime, timedelta
 
-from trello import TrelloClient, Board, List, Card
+from trello import TrelloClient, Board, List, Card, Label
 
 
 class TrelloExecption(Exception):
@@ -91,5 +93,44 @@ class ShoppingTask(TrelloManager):
                 pass
 
 
+class ReplayDateTask(TrelloManager):
+    _board = "Tasks"
+
+    def __init__(self):
+        super().__init__()
+        self.todo_list = self.get_list_by_name("ToDo")
+        self.replay_list = self.get_list_by_name("Replay")
+        self.backlog_list = self.get_list_by_name("Backlog")
+        self.labels = self.board.get_labels()
+        self.replay_label = None  # type: Label
+        for label in self.labels:
+            if label.name == "replay":
+                self.replay_label = label
+                break
+        self.today = datetime.now()
+
+    def run(self):
+        self._extract_from_archive()
+        self._sort_replay()
+
+    def _extract_from_archive(self):
+        print("Processing closed Cards")
+        for card in self.todo_list.list_cards(card_filter="closed"):
+            if card.labels and self.replay_label in card.labels:
+                print(f"openning Card {card}")
+                card.change_list(self.replay_list.id)
+                card.set_closed(False)
+                replay_hit = re.search(r".*\((\d{1,3}) d\)", card.name)
+                try:
+                    replay_time = int(replay_hit.group(1))
+                except AttributeError:
+                    print("ERROR: No valid duration in card name")
+                    continue
+                card.set_due(self.today + timedelta(days=replay_time))
+
+    def _sort_replay(self):
+        pass
+
+
 if __name__ == "__main__":  # pragma: no cover
-    ShoppingTask().run()
+    ReplayDateTask().run()
