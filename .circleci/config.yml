@@ -43,6 +43,16 @@ show_python_version: &show_python_version
     command: |
       python --version
 
+terraform_plan: &terraform_plan
+  run:
+    name: terraform plan
+    command: |
+      push terraform
+      terraform plan
+
+
+# defining the steps for each job
+
 coverage_steps: &coverage_steps
   steps:
     - checkout
@@ -52,6 +62,11 @@ coverage_steps: &coverage_steps
     - <<: *run_coverage
     - <<: *save_cache
     - <<: *report_codecov
+
+plan_steps: &plan_steps
+  steps:
+    - checkout
+    - <<: *terraform_plan
 
 # job definitions
 
@@ -66,13 +81,7 @@ jobs:
     docker:
       - image: hashicorp/terraform:light
     working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-        name: terraform plan
-        command: |
-          push terraform
-          terraform plan
+    <<: *plan_steps
 
 # dependencies for the workflow
 
