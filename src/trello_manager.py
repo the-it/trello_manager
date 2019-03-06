@@ -2,6 +2,7 @@ import os
 import pprint
 import re
 import typing
+from pytz import UTC
 from datetime import datetime, timedelta
 
 from trello import TrelloClient, Board, List, Card, Label
@@ -111,7 +112,9 @@ class ReplayDateTask(TrelloManager):
 
     def run(self):
         self._extract_from_archive()
+        self._put_to_todo(self.replay_list)
         self._sort_replay(self.replay_list)
+        self._sort_replay(self.todo_list)
 
     def _extract_from_archive(self):
         print("Processing closed Cards")
@@ -131,13 +134,27 @@ class ReplayDateTask(TrelloManager):
     @staticmethod
     def _sort_replay(list_to_sort: List):
         print(f"Sorting Cards on board {list_to_sort}")
+        cards_with_due = ReplayDateTask.get_cards_with_due(list_to_sort)
+        sorted_cards = sorted(cards_with_due, key=lambda list_card: list_card.due, reverse=True)
+        for card in sorted_cards:
+            card.set_pos(0)
+
+    @staticmethod
+    def get_cards_with_due(list_to_sort):
         cards_with_due = []
         for card in list_to_sort.list_cards():
             if card.due_date:
                 cards_with_due.append(card)
-        sorted_cards = sorted(cards_with_due, key=lambda list_card: list_card.due)
-        for card in sorted_cards:
-            card.set_pos(1)
+        return cards_with_due
+
+    def _put_to_todo(self, list_to_move: List):
+        print(f"Moving Cards on board {list_to_move} to todo list")
+        cards_with_due = ReplayDateTask.get_cards_with_due(list_to_move)
+        for card in cards_with_due:
+            if card.due_date.replace(tzinfo=UTC) < \
+                    self.today.replace(tzinfo=UTC) + timedelta(days=2):
+                card.change_list(self.todo_list.id)
+
 
 
 if __name__ == "__main__":  # pragma: no cover
