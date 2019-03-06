@@ -179,7 +179,7 @@ class TestReplayDateTask(TrelloTest):
         compare(1, len(closed_cards))
         compare("Test_Stay_In_Archive", closed_cards[0].name)
 
-    def test_replay_to_todo(self):
+    def test_replay_and_backlog_to_todo(self):
         self.list_replay.add_card("Test_To_Todo_2 (20 d)",
                                 labels=[self.label_replay],
                                 due=self.now.strftime(self._DATE_FORMAT))
@@ -189,6 +189,12 @@ class TestReplayDateTask(TrelloTest):
         self.list_replay.add_card("Test_Stay_Replay_1 (20 d)",
                                 labels=[self.label_replay],
                                 due=(self.now + timedelta(days=3)).strftime(self._DATE_FORMAT))
+        self.list_backlog.add_card("Test_To_Todo_3",
+                                   due=(self.now + timedelta(days=1)).strftime(self._DATE_FORMAT))
+        self.list_backlog.add_card("Test_Stay_Backlog_1",
+                                   due=(self.now + timedelta(days=10)).strftime(self._DATE_FORMAT))
+        self.list_backlog.add_card("Test_Stay_Backlog_2",
+                                   due=(self.now + timedelta(days=4)).strftime(self._DATE_FORMAT))
         self.list_todo.add_card("Just_a_card")
 
         self.task.run()
@@ -197,8 +203,14 @@ class TestReplayDateTask(TrelloTest):
         compare(1, len(replay_cards))
         compare("Test_Stay_Replay_1 (20 d)", replay_cards[0].name)
 
+        backlog_cards = self.list_backlog.list_cards()
+        compare(2, len(backlog_cards))
+        compare("Test_Stay_Backlog_2", backlog_cards[0].name)
+        compare("Test_Stay_Backlog_1", backlog_cards[1].name)
+
         todo_cards = self.list_todo.list_cards()
-        compare(3, len(todo_cards))
+        compare(4, len(todo_cards))
         compare("Test_To_Todo_2 (20 d)", todo_cards[0].name)
-        compare("Test_To_Todo_1 (20 d)", todo_cards[1].name)
-        compare("Just_a_card", todo_cards[2].name)
+        compare("Test_To_Todo_3", todo_cards[1].name)
+        compare("Test_To_Todo_1 (20 d)", todo_cards[2].name)
+        compare("Just_a_card", todo_cards[3].name)

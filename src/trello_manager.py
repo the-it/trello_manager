@@ -96,6 +96,7 @@ class ShoppingTask(TrelloManager):
 
 class ReplayDateTask(TrelloManager):
     _board = "Tasks"
+    _DAYS_FOR_TODO = 2
 
     def __init__(self):
         super().__init__()
@@ -113,8 +114,10 @@ class ReplayDateTask(TrelloManager):
     def run(self):
         self._extract_from_archive()
         self._put_to_todo(self.replay_list)
+        self._put_to_todo(self.backlog_list)
         self._sort_replay(self.replay_list)
         self._sort_replay(self.todo_list)
+        self._sort_replay(self.backlog_list)
 
     def _extract_from_archive(self):
         print("Processing closed Cards")
@@ -152,7 +155,7 @@ class ReplayDateTask(TrelloManager):
         cards_with_due = ReplayDateTask.get_cards_with_due(list_to_move)
         for card in cards_with_due:
             if card.due_date.replace(tzinfo=UTC) < \
-                    self.today.replace(tzinfo=UTC) + timedelta(days=2):
+                    self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
                 card.change_list(self.todo_list.id)
 
 
