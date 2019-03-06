@@ -49,7 +49,7 @@ terraform_plan: &terraform_plan
     command: |
       cd terraform
       terraform init
-      terraform plan
+      terraform plan -var "lambda_version=123" -var "trello_key=${TRELLO_API_KEY}" -var "trello_secret=${TRELLO_API_SECRET}"
 
 
 # defining the steps for each job
