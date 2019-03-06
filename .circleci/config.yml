@@ -47,7 +47,8 @@ terraform_plan: &terraform_plan
   run:
     name: terraform plan
     command: |
-      push terraform
+      cd terraform
+      terraform init
       terraform plan
 
 
