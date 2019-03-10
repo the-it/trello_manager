@@ -35,7 +35,7 @@ report_codecov: &report_codecov
     name: report codecov
     command: |
       . venv/bin/activate
-      codecov
+      make codecov
 
 show_python_version: &show_python_version
   run:
@@ -47,16 +47,16 @@ coverage_steps: &coverage_steps
   steps:
     - checkout
     - <<: *restore_cache
+    - <<: *install_dependencies
     - <<: *show_python_version
     - <<: *run_coverage
-    - <<: *install_dependencies
     - <<: *save_cache
     - <<: *report_codecov
 
 # job definitions
 
 jobs:
-  coverage37:
+  coverage:
     docker:
       - image: circleci/python:3.7
     working_directory: ~/repo
@@ -68,5 +68,5 @@ workflows:
   version: 2
   test:
     jobs:
-      - coverage37:
+      - coverage:
           context: trello

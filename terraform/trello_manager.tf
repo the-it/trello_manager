@@ -62,7 +62,7 @@ resource "aws_lambda_function" "lambda_function" {
 
 resource "aws_cloudwatch_event_rule" "scheduled_rule" {
   name = "trigger-trello-manager"
-  schedule_expression = "cron(00 23 * * ? *)"
+  schedule_expression = "cron(00 22 * * ? *)"
   is_enabled = true
 }
 
@@ -81,6 +81,6 @@ resource "aws_cloudwatch_event_target" "scheduled_rule_target" {
 
 resource "aws_cloudwatch_log_group" "log_group" {
   name = "/aws/lambda/${aws_lambda_function.lambda_function.function_name}"
-  retention_in_days = 3
+  retention_in_days = 30
 }
 

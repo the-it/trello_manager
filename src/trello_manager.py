@@ -1,8 +1,11 @@
 import os
 import pprint
+import re
 import typing
+from pytz import UTC
+from datetime import datetime, timedelta
 
-from trello import TrelloClient, Board, List, Card
+from trello import TrelloClient, Board, List, Card, Label
 
 
 class TrelloExecption(Exception):
@@ -91,5 +94,71 @@ class ShoppingTask(TrelloManager):
                 pass
 
 
+class ReplayDateTask(TrelloManager):
+    _board = "Tasks"
+    _DAYS_FOR_TODO = 2
+
+    def __init__(self):
+        super().__init__()
+        self.todo_list = self.get_list_by_name("ToDo")
+        self.replay_list = self.get_list_by_name("Replay")
+        self.backlog_list = self.get_list_by_name("Backlog")
+        self.labels = self.board.get_labels()
+        self.replay_label = None  # type: Label
+        for label in self.labels:
+            if label.name == "replay":
+                self.replay_label = label
+                break
+        self.today = datetime.now()
+
+    def run(self):
+        self._extract_from_archive()
+        self._put_to_todo(self.replay_list)
+        self._put_to_todo(self.backlog_list)
+        self._sort_replay(self.replay_list)
+        self._sort_replay(self.todo_list)
+        self._sort_replay(self.backlog_list)
+
+    def _extract_from_archive(self):
+        print("Processing closed Cards")
+        for card in self.todo_list.list_cards(card_filter="closed"):
+            if card.labels and self.replay_label in card.labels:
+                print(f"openning Card {card}")
+                card.change_list(self.replay_list.id)
+                card.set_closed(False)
+                replay_hit = re.search(r".*\((\d{1,3}) d\)", card.name)
+                try:
+                    replay_time = int(replay_hit.group(1))
+                except AttributeError:
+                    print("ERROR: No valid duration in card name")
+                    continue
+                card.set_due(self.today + timedelta(days=replay_time))
+
+    @staticmethod
+    def _sort_replay(list_to_sort: List):
+        print(f"Sorting Cards on board {list_to_sort}")
+        cards_with_due = ReplayDateTask.get_cards_with_due(list_to_sort)
+        sorted_cards = sorted(cards_with_due, key=lambda list_card: list_card.due, reverse=True)
+        for card in sorted_cards:
+            card.set_pos(0)
+
+    @staticmethod
+    def get_cards_with_due(list_to_sort):
+        cards_with_due = []
+        for card in list_to_sort.list_cards():
+            if card.due_date:
+                cards_with_due.append(card)
+        return cards_with_due
+
+    def _put_to_todo(self, list_to_move: List):
+        print(f"Moving Cards on board {list_to_move} to todo list")
+        cards_with_due = ReplayDateTask.get_cards_with_due(list_to_move)
+        for card in cards_with_due:
+            if card.due_date.replace(tzinfo=UTC) < \
+                    self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
+                card.change_list(self.todo_list.id)
+
+
+
 if __name__ == "__main__":  # pragma: no cover
-    ShoppingTask().run()
+    ReplayDateTask().run()

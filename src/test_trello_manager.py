@@ -1,12 +1,12 @@
 import os
+from datetime import datetime, timedelta
 from time import sleep
 from unittest import TestCase
 
 from testfixtures import compare
 from trello import TrelloClient
 
-from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask
-
+from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask
 
 TEST_BOARD = "UNITTEST"
 TEST_KEY = "TRELLO_API_KEY_TEST"
@@ -75,10 +75,6 @@ class TestShoppingTask(TrelloTest):
     ShoppingTask._key = TEST_KEY
     ShoppingTask._secret = TEST_SECRET
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-
     def setUp(self):
         super().setUp()
         self.buy_list = self.board.add_list("Wichtiges Einkaufen")
@@ -135,3 +131,86 @@ class TestShoppingTask(TrelloTest):
             compare("Test_Item_0", cards[0].name)
             compare("Test_Item_2", cards[1].name)
             compare("Test_Item_4", cards[2].name)
+
+
+class TestReplayDateTask(TrelloTest):
+    ReplayDateTask._board = TEST_BOARD
+    ReplayDateTask._key = TEST_KEY
+    ReplayDateTask._secret = TEST_SECRET
+
+    _DATE_FORMAT = "%Y-%m-%d"
+
+    def setUp(self):
+        super().setUp()
+        self.list_todo = self.board.add_list("ToDo")
+        self.list_replay = self.board.add_list("Replay")
+        self.list_backlog = self.board.add_list("Backlog")
+        self.label_replay = self.board.add_label("replay", "red")
+        self.task = ReplayDateTask()
+        self.now = datetime.now()
+
+    def test_fetch_from_archive(self):
+        self.list_todo.add_card("Test_Get_From_Archive_1 (20 d)", labels=[self.label_replay])
+        self.list_todo.add_card("Test_Get_From_Archive_2 (10 d)", labels=[self.label_replay])
+        self.list_todo.add_card("Test_Get_From_Archive_3 (wrong timedelta)",
+                                labels=[self.label_replay],
+                                due=self.now.strftime(self._DATE_FORMAT))
+        self.list_todo.add_card("Test_Stay_In_Archive",
+                                due=(self.now + timedelta(days=1)).strftime(self._DATE_FORMAT))
+        self.list_todo.archive_all_cards()
+        self.list_todo.add_card("Test_Stay_On_Board (20 d)", labels=[self.label_replay])
+
+        self.task.run()
+
+        todo_cards = self.list_todo.list_cards()
+        compare(2, len(todo_cards))
+        compare("Test_Get_From_Archive_3 (wrong timedelta)", todo_cards[0].name)
+        compare(self.now.date(), todo_cards[0].due_date.date())
+        compare("Test_Stay_On_Board (20 d)", todo_cards[1].name)
+
+        replay_cards = self.list_replay.list_cards()
+        compare(2, len(replay_cards))
+        compare("Test_Get_From_Archive_2 (10 d)", replay_cards[0].name)
+        compare((self.now + timedelta(days=10)).date(), replay_cards[0].due_date.date())
+        compare("Test_Get_From_Archive_1 (20 d)", replay_cards[1].name)
+        compare((self.now + timedelta(days=20)).date(), replay_cards[1].due_date.date())
+
+        closed_cards = self.board.closed_cards()
+        compare(1, len(closed_cards))
+        compare("Test_Stay_In_Archive", closed_cards[0].name)
+
+    def test_replay_and_backlog_to_todo(self):
+        self.list_replay.add_card("Test_To_Todo_2 (20 d)",
+                                labels=[self.label_replay],
+                                due=self.now.strftime(self._DATE_FORMAT))
+        self.list_replay.add_card("Test_To_Todo_1 (20 d)",
+                                labels=[self.label_replay],
+                                due=(self.now + timedelta(days=2)).strftime(self._DATE_FORMAT))
+        self.list_replay.add_card("Test_Stay_Replay_1 (20 d)",
+                                labels=[self.label_replay],
+                                due=(self.now + timedelta(days=3)).strftime(self._DATE_FORMAT))
+        self.list_backlog.add_card("Test_To_Todo_3",
+                                   due=(self.now + timedelta(days=1)).strftime(self._DATE_FORMAT))
+        self.list_backlog.add_card("Test_Stay_Backlog_1",
+                                   due=(self.now + timedelta(days=10)).strftime(self._DATE_FORMAT))
+        self.list_backlog.add_card("Test_Stay_Backlog_2",
+                                   due=(self.now + timedelta(days=4)).strftime(self._DATE_FORMAT))
+        self.list_todo.add_card("Just_a_card")
+
+        self.task.run()
+
+        replay_cards = self.list_replay.list_cards()
+        compare(1, len(replay_cards))
+        compare("Test_Stay_Replay_1 (20 d)", replay_cards[0].name)
+
+        backlog_cards = self.list_backlog.list_cards()
+        compare(2, len(backlog_cards))
+        compare("Test_Stay_Backlog_2", backlog_cards[0].name)
+        compare("Test_Stay_Backlog_1", backlog_cards[1].name)
+
+        todo_cards = self.list_todo.list_cards()
+        compare(4, len(todo_cards))
+        compare("Test_To_Todo_2 (20 d)", todo_cards[0].name)
+        compare("Test_To_Todo_3", todo_cards[1].name)
+        compare("Test_To_Todo_1 (20 d)", todo_cards[2].name)
+        compare("Just_a_card", todo_cards[3].name)
