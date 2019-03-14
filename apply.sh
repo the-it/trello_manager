@@ -8,7 +8,8 @@ VERSION=$(cat zip/version.txt)
 
 rm -rf .terraform
 terraform init
-terraform apply -var "lambda_version=${VERSION}" \
+terraform apply -auto-approve
+                -var "lambda_version=${VERSION}" \
                 -var "trello_key=${TRELLO_API_KEY}" \
                 -var "trello_secret=${TRELLO_API_SECRET}"
 
