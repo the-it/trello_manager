@@ -1,18 +1,63 @@
 version: 2
 
-# define first all the single commands ... for reuse
+references:
 
-restore_cache: &restore_cache
+python_image: &python_image
+  circleci/python:3.7
+
+terraform_image: &terraform_image
+  hashicorp/terraform:light
+
+working_directory: &working_directory
+  ~/repo
+
+repo_cache_key: &repo_cache_key
+  v3-repo-{{ .Branch }}-{{ .Revision }}
+
+# Step to restore repository from cache
+restore_repo: &restore_repo
   restore_cache:
-    keys:
-      - v2-dependencies-{{ .Environment.CIRCLE_BRANCH }}-{{ checksum "requirements.txt" }}
-      - v2-dependencies-{{ .Environment.CIRCLE_BRANCH }}-
+    key: *repo_cache_key
 
-save_cache: &save_cache
+save_repo: &save_repo
   save_cache:
+    key: *repo_cache_key
     paths:
-      - ./venv
-    key: v2-dependencies-{{ .Environment.CIRCLE_BRANCH }}-{{ checksum "requirements.txt" }}
+      - *working_directory
+
+terraform_build: &terraform_build
+  run:
+    name: terraform build
+    command: |
+      ./build.sh
+
+install_dep: &install_dep
+  run:
+    name: Install Alpine dependencies
+    command: apk add bash
+
+save_workspace: &save_workspace
+  persist_to_workspace:
+    root: terraform/zip
+    paths:
+      - lambda*.zip
+      - version.txt
+
+restore_workspace: &restore_workspace
+  attach_workspace:
+    at: terraform/zip
+
+terraform_plan: &terraform_plan
+  run:
+    name: terraform plan
+    command: |
+      ./plan.sh
+
+terraform_apply: &terraform_apply
+  run:
+    name: terraform apply
+    command: |
+      ./apply.sh
 
 install_dependencies: &install_dependencies
   run:
@@ -43,24 +88,65 @@ show_python_version: &show_python_version
     command: |
       python --version
 
+
+# defining the steps for each job
+
 coverage_steps: &coverage_steps
   steps:
     - checkout
-    - <<: *restore_cache
-    - <<: *install_dependencies
-    - <<: *show_python_version
-    - <<: *run_coverage
-    - <<: *save_cache
-    - <<: *report_codecov
+    - *restore_repo
+    - *install_dependencies
+    - *show_python_version
+    - *run_coverage
+    - *report_codecov
+    - *save_repo
+
+build_steps: &build_steps
+  steps:
+    - *restore_repo
+    - *terraform_build
+    - *save_workspace
+
+plan_steps: &plan_steps
+  steps:
+    - *install_dep
+    - checkout
+    - *restore_workspace
+    - *terraform_plan
+
+apply_steps: &apply_steps
+  steps:
+    - *install_dep
+    - checkout
+    - *restore_workspace
+    - *terraform_apply
 
 # job definitions
 
 jobs:
   coverage:
     docker:
-      - image: circleci/python:3.7
-    working_directory: ~/repo
+      - image: *python_image
+    working_directory: *working_directory
     <<: *coverage_steps
+
+  build:
+    docker:
+      - image: *python_image
+    working_directory: *working_directory
+    <<: *build_steps
+
+  plan:
+    docker:
+      - image: *terraform_image
+    working_directory: *working_directory
+    <<: *plan_steps
+
+  apply:
+    docker:
+      - image: *terraform_image
+    working_directory: *working_directory
+    <<: *apply_steps
 
 # dependencies for the workflow
 
@@ -70,3 +156,21 @@ workflows:
     jobs:
       - coverage:
           context: trello
+      - build:
+          context: trello_deploy
+          requires:
+            - coverage
+      - plan:
+          context: trello_deploy
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: master
+      - apply:
+          context: trello_deploy
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

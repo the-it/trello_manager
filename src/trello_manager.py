@@ -109,7 +109,7 @@ class ReplayDateTask(TrelloManager):
             if label.name == "replay":
                 self.replay_label = label
                 break
-        self.today = datetime.now()
+        self.today = datetime.now().replace(tzinfo=UTC)
 
     def run(self):
         self._extract_from_archive()
