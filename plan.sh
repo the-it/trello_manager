@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 LAMBDA_NAME=trello_manager
 SCRIPT_DIR="$(cd "$(dirname "$0")" ; pwd -P)"
 
