@@ -164,10 +164,10 @@ workflows:
           context: trello_deploy
           requires:
             - build
-          filters:
-            branches:
-              ignore: master
       - apply:
           context: trello_deploy
           requires:
             - plan
+          filters:
+            branches:
+              only: master
