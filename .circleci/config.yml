@@ -152,7 +152,7 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  test and send to cloud:
     jobs:
       - coverage:
           context: trello
@@ -170,7 +170,4 @@ workflows:
       - apply:
           context: trello_deploy
           requires:
-            - build
-          filters:
-            branches:
-              only: master
+            - plan
