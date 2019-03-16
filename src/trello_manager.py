@@ -153,6 +153,7 @@ class ReplayDateTask(TrelloManager):
     def _put_to_todo(self, list_to_move: List):
         print(f"Moving Cards on board {list_to_move} to todo list")
         cards_with_due = ReplayDateTask.get_cards_with_due(list_to_move)
+        self.printer.pprint(cards_with_due)
         for card in cards_with_due:
             if card.due_date.replace(tzinfo=UTC) < \
                     self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
