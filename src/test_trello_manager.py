@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 import os
 from datetime import datetime, timedelta
 from time import sleep
@@ -22,7 +23,8 @@ class TrelloTest(TestCase):
         )
 
     def setUp(self):
-        # this is necessary, because the calls to the api of trello are limited to 100calls/10seconds
+        # this is necessary, because the calls to the api of trello are limited to
+        # 100calls/10seconds.
         if "CIRCLECI" in os.environ:
             sleep(10)
         self.board = self._refresh_test_board()
@@ -86,7 +88,7 @@ class TestShoppingTask(TrelloTest):
         self.list_sonstiges = self.board.add_list("Gerade nicht kaufen (Sonstiges)")
         self.label_sonstiges = self.board.add_label("Sonstiges", "green")
         self.task = ShoppingTask()
-        
+
     def test_integration(self):
         self.buy_list.add_card("Test_Item_1", labels=[self.label_lebensmittel])
         self.buy_list.add_card("Test_Item_2", labels=[self.label_drogerie])
@@ -181,14 +183,14 @@ class TestReplayDateTask(TrelloTest):
 
     def test_replay_and_backlog_to_todo(self):
         self.list_replay.add_card("Test_To_Todo_2 (20 d)",
-                                labels=[self.label_replay],
-                                due=self.now.strftime(self._DATE_FORMAT))
+                                  labels=[self.label_replay],
+                                  due=self.now.strftime(self._DATE_FORMAT))
         self.list_replay.add_card("Test_To_Todo_1 (20 d)",
-                                labels=[self.label_replay],
-                                due=(self.now + timedelta(days=2)).strftime(self._DATE_FORMAT))
+                                  labels=[self.label_replay],
+                                  due=(self.now + timedelta(days=2)).strftime(self._DATE_FORMAT))
         self.list_replay.add_card("Test_Stay_Replay_1 (20 d)",
-                                labels=[self.label_replay],
-                                due=(self.now + timedelta(days=3)).strftime(self._DATE_FORMAT))
+                                  labels=[self.label_replay],
+                                  due=(self.now + timedelta(days=3)).strftime(self._DATE_FORMAT))
         self.list_backlog.add_card("Test_To_Todo_3",
                                    due=(self.now + timedelta(days=1)).strftime(self._DATE_FORMAT))
         self.list_backlog.add_card("Test_Stay_Backlog_1",
