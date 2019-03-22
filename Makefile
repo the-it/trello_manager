@@ -10,6 +10,22 @@ unittest :
 	echo "########### UNITTEST ###########"
 	venv/bin/nosetests
 
+safety :
+	echo "############ SAFETY ############"
+	safety check
+
+flake8 :
+	echo "############ FLAKE8 ############"
+	flake8
+
+pycodestyle :
+	echo "########## PYCODESTYLE #########"
+	pycodestyle --show-source --statistics --count src
+
+pylint :
+	echo "############ PYLINT ############"
+	pylint -j4 --rcfile .pylintrc src
+
 coverage : clean-coverage
 	echo "########### COVERAGE ###########"
 	venv/bin/nosetests --with-coverage && \

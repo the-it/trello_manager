@@ -2,9 +2,9 @@ import os
 import pprint
 import re
 import typing
-from pytz import UTC
 from datetime import datetime, timedelta
 
+from pytz import UTC
 from trello import TrelloClient, Board, List, Card, Label
 
 
@@ -12,8 +12,8 @@ class TrelloExecption(Exception):
     pass
 
 
-class TrelloManager:
-    _board = None # type: str
+class TrelloManager:  # pylint: disable=too-few-public-methods
+    _board = None  # type: str
     _key = "TRELLO_API_KEY"
     _secret = "TRELLO_API_SECRET"
 
@@ -91,7 +91,6 @@ class ShoppingTask(TrelloManager):
             for card in card_dict[key]:
                 card.change_list(self.lists[key].id)
                 card.set_closed(False)
-                pass
 
 
 class ReplayDateTask(TrelloManager):
@@ -158,7 +157,6 @@ class ReplayDateTask(TrelloManager):
             if card.due_date.replace(tzinfo=UTC) < \
                     self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
                 card.change_list(self.todo_list.id)
-
 
 
 if __name__ == "__main__":  # pragma: no cover

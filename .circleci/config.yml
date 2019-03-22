@@ -88,6 +88,38 @@ show_python_version: &show_python_version
     command: |
       python --version
 
+flake8: &flake8
+  run:
+    name: flake8
+    when: always
+    command: |
+      . venv/bin/activate
+      make flake8
+
+pycodestyle: &pycodestyle
+  run:
+    name: pycodestyle
+    when: always
+    command: |
+      . venv/bin/activate
+      make pycodestyle
+
+pylint: &pylint
+  run:
+    name: pylint
+    when: always
+    command: |
+      . venv/bin/activate
+      make pylint
+
+safety: &safety
+  run:
+    name: safety
+    when: always
+    command: |
+      . venv/bin/activate
+      make safety
+
 
 # defining the steps for each job
 
@@ -97,6 +129,10 @@ coverage_steps: &coverage_steps
     - *restore_repo
     - *install_dependencies
     - *show_python_version
+    - *flake8
+    - *pylint
+    - *pycodestyle
+    - *safety
     - *run_coverage
     - *report_codecov
     - *save_repo
