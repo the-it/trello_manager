@@ -26,6 +26,10 @@ pylint :
 	echo "############ PYLINT ############"
 	pylint -j4 --rcfile .pylintrc src
 
+mypy :
+	echo "############# MYPY #############"
+	mypy src || true
+
 coverage : clean-coverage
 	echo "########### COVERAGE ###########"
 	venv/bin/nosetests --with-coverage && \
