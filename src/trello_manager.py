@@ -103,7 +103,7 @@ class ReplayDateTask(TrelloManager):
         self.replay_list = self.get_list_by_name("Replay")
         self.backlog_list = self.get_list_by_name("Backlog")
         self.labels = self.board.get_labels()
-        self.replay_label = None  # type: Label
+        self.replay_label: Label = None
         for label in self.labels:
             if label.name == "replay":
                 self.replay_label = label
