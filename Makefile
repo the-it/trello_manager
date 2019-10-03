@@ -26,6 +26,10 @@ pylint :
 	echo "############ PYLINT ############"
 	pylint -j4 --rcfile .pylintrc src
 
+mypy :
+	echo "############# MYPY #############"
+	mypy src
+
 coverage : clean-coverage
 	echo "########### COVERAGE ###########"
 	venv/bin/nosetests --with-coverage && \
@@ -46,6 +50,8 @@ codecov :
 
 clean : clean-pyc clean-coverage
 
-pre-commit : unittest
+quality : safety flake8 pycodestyle pylint mypy
 
-.PHONY : clean, pre-commit
+pre-commit : quality unittest
+
+.PHONY : clean, pre-commit quality

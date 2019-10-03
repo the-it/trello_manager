@@ -26,7 +26,7 @@ class TrelloTest(TestCase):
         # this is necessary, because the calls to the api of trello are limited to
         # 100calls/10seconds.
         if "CIRCLECI" in os.environ:
-            sleep(10)
+            sleep(4)
         self.board = self._refresh_test_board()
 
     def tearDown(self):
@@ -47,7 +47,7 @@ class TrelloTest(TestCase):
 
 
 class TestTrelloManager(TrelloTest):
-    TrelloManager._board = TEST_BOARD
+    TrelloManager._board_name = TEST_BOARD
     TrelloManager._key = TEST_KEY
     TrelloManager._secret = TEST_SECRET
 
@@ -56,11 +56,11 @@ class TestTrelloManager(TrelloTest):
         self.manager = TrelloManager()
 
     def test_no_board(self):
-        TrelloManager._board = "Tada"
+        TrelloManager._board_name = "Tada"
         with self.assertRaises(TrelloExecption):
             TrelloManager()
 
-        TrelloManager._board = None
+        TrelloManager._board_name = None
         with self.assertRaises(TrelloExecption):
             TrelloManager()
 
@@ -73,7 +73,7 @@ class TestTrelloManager(TrelloTest):
 
 
 class TestShoppingTask(TrelloTest):
-    ShoppingTask._board = TEST_BOARD
+    ShoppingTask._board_name = TEST_BOARD
     ShoppingTask._key = TEST_KEY
     ShoppingTask._secret = TEST_SECRET
 
