@@ -13,19 +13,19 @@ class TrelloExecption(Exception):
 
 
 class TrelloManager:  # pylint: disable=too-few-public-methods
-    _board = None  # type: str
+    _board_name = None  # type: str
     _key = "TRELLO_API_KEY"
     _secret = "TRELLO_API_SECRET"
 
     def __init__(self):
-        self.client = TrelloClient(
+        self.client: TrelloClient = TrelloClient(
             api_key=os.environ[self._key],
             api_secret=os.environ[self._secret]
         )
-        self.board = self._init_board(self._board)
+        self.board: Board = self._init_board(self._board_name)
         if not self.board:
-            raise TrelloExecption("Board {} doesn't exists.".format(self._board))
-        self.printer = pprint.PrettyPrinter(indent=2)
+            raise TrelloExecption("Board {} doesn't exists.".format(self._board_name))
+        self.printer: pprint.PrettyPrinter = pprint.PrettyPrinter(indent=2)
 
     def _init_board(self, board_name: str) -> typing.Union[Board, None]:
         for board in self.client.list_boards():
@@ -41,16 +41,16 @@ class TrelloManager:  # pylint: disable=too-few-public-methods
 
 
 class ShoppingTask(TrelloManager):
-    _board = "Einkaufen"
+    _board_name: str = "Einkaufen"
 
-    label = {"Drogerie": "Drogerie",
-             "Lebensmittel": "Lebensmittel",
-             "Getränke": "Lebensmittel",
-             "Sonstiges": "Sonstiges"}
+    label: typing.Dict[str, str] = {"Drogerie": "Drogerie",
+                                    "Lebensmittel": "Lebensmittel",
+                                    "Getränke": "Lebensmittel",
+                                    "Sonstiges": "Sonstiges"}
 
     def __init__(self):
         super().__init__()
-        self.lists = self._get_lists()
+        self.lists: typing.Dict[str, List] = self._get_lists()
 
     def run(self):
         cards = self._get_archived_cards()
@@ -68,8 +68,8 @@ class ShoppingTask(TrelloManager):
         for idx, card in enumerate(cards):
             card.set_pos(idx + 1)
 
-    def _get_archived_cards(self):
-        cards = {}
+    def _get_archived_cards(self) -> typing.Dict[str, typing.List[Card]]:
+        cards: typing.Dict[str, typing.List[Card]] = {}
         for key in self.label.values():
             cards[key] = []
         for card in self.board.closed_cards():
@@ -80,7 +80,7 @@ class ShoppingTask(TrelloManager):
                         break
         return cards
 
-    def _get_lists(self):
+    def _get_lists(self) -> typing.Dict[str, List]:
         lists = {}
         for list_name in self.label.values():
             lists[list_name] = self.get_list_by_name(f"Gerade nicht kaufen ({list_name})")
@@ -99,16 +99,16 @@ class ReplayDateTask(TrelloManager):
 
     def __init__(self):
         super().__init__()
-        self.todo_list = self.get_list_by_name("ToDo")
-        self.replay_list = self.get_list_by_name("Replay")
-        self.backlog_list = self.get_list_by_name("Backlog")
-        self.labels = self.board.get_labels()
+        self.todo_list: List = self.get_list_by_name("ToDo")
+        self.replay_list: List = self.get_list_by_name("Replay")
+        self.backlog_list: List = self.get_list_by_name("Backlog")
+        self.labels: typing.List[Label] = self.board.get_labels()
         self.replay_label: Label = None
         for label in self.labels:
             if label.name == "replay":
                 self.replay_label = label
                 break
-        self.today = datetime.now().replace(tzinfo=UTC)
+        self.today: datetime = datetime.now().replace(tzinfo=UTC)
 
     def run(self):
         self._extract_from_archive()
@@ -142,7 +142,7 @@ class ReplayDateTask(TrelloManager):
             card.set_pos(0)
 
     @staticmethod
-    def get_cards_with_due(list_to_sort):
+    def get_cards_with_due(list_to_sort: List) -> typing.List[Card]:
         cards_with_due = []
         for card in list_to_sort.list_cards():
             if card.due_date:

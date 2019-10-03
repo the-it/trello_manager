@@ -112,6 +112,14 @@ pylint: &pylint
       . venv/bin/activate
       make pylint
 
+mypy: &mypy
+  run:
+    name: mypy
+    when: always
+    command: |
+      . venv/bin/activate
+      make mypy
+
 safety: &safety
   run:
     name: safety
@@ -131,6 +139,7 @@ coverage_steps: &coverage_steps
     - *show_python_version
     - *flake8
     - *pylint
+    - *mypy
     - *pycodestyle
     - *safety
     - *run_coverage
