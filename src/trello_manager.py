@@ -94,7 +94,7 @@ class ShoppingTask(TrelloManager):
 
 
 class ReplayDateTask(TrelloManager):
-    _board = "Tasks"
+    _board_name = "Tasks"
     _DAYS_FOR_TODO = 2
 
     def __init__(self):
