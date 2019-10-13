@@ -136,7 +136,7 @@ class TestShoppingTask(TrelloTest):
 
 
 class TestReplayDateTask(TrelloTest):
-    ReplayDateTask._board = TEST_BOARD
+    ReplayDateTask._board_name = TEST_BOARD
     ReplayDateTask._key = TEST_KEY
     ReplayDateTask._secret = TEST_SECRET
 
