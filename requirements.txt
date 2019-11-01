@@ -8,4 +8,4 @@ py-trello==0.14.0
 pylint==2.4.3
 pytz==2019.3
 safety==1.8.5
-testfixtures==6.10.0
+testfixtures==6.10.1
