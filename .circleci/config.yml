@@ -3,7 +3,7 @@ version: 2
 references:
 
 python_image: &python_image
-  circleci/python:3.7
+  circleci/python:3.8
 
 terraform_image: &terraform_image
   hashicorp/terraform:light
