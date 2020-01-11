@@ -2,9 +2,19 @@ clean-pyc :
 	echo "######## CLEAN PY CACHE ########"
 	find . | grep -E "__pycache__" | xargs rm -rf
 
-pip3 :
+update_pip_tool :
+	echo "########## UPDATE PIP ##########"
+	pip install --upgrade pip
+
+pip3 : update_pip_tool
 	echo "##### INSTALL REQUIREMENTS #####"
 	pip3 install -r requirements.txt
+
+update_pip3 : update_pip_tool
+	echo "##### UPDATE REQUIREMENTS ######"
+	pip install pip-tools -U
+	pip-compile --output-file requirements.txt requirements.in
+	pip-sync
 
 unittest :
 	echo "########### UNITTEST ###########"
@@ -44,7 +54,7 @@ coverage-html : coverage
 	coverage html -d .coverage_html
 	python -c "import webbrowser, os; webbrowser.open('file://' + os.path.realpath('.coverage_html/index.html'))"
 
-codecov : 
+codecov :
 	echo "########### CODECOV ############"
 	codecov
 
@@ -52,6 +62,6 @@ clean : clean-pyc clean-coverage
 
 quality : safety flake8 pycodestyle pylint mypy
 
-pre-commit : quality unittest
+pre-commit : pip3 quality unittest
 
 .PHONY : clean, pre-commit quality

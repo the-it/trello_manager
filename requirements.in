@@ -1,0 +1,10 @@
+coverage
+codecov
+flake8
+mypy
+nose
+py-trello
+pylint
+pytz
+safety
+testfixtures
