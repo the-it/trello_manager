@@ -6,6 +6,12 @@ pip3 :
 	echo "##### INSTALL REQUIREMENTS #####"
 	pip3 install -r requirements.txt
 
+update_pip3 :
+	echo "##### UPDATE REQUIREMENTS ######"
+	pip install pip-tools -U
+	pip-compile --output-file requirements.txt requirements.in
+	pip-sync
+
 unittest :
 	echo "########### UNITTEST ###########"
 	venv/bin/nosetests
@@ -52,6 +58,6 @@ clean : clean-pyc clean-coverage
 
 quality : safety flake8 pycodestyle pylint mypy
 
-pre-commit : quality unittest
+pre-commit : pip3 quality unittest
 
 .PHONY : clean, pre-commit quality
