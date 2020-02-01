@@ -35,7 +35,7 @@ requests==2.22.0          # via codecov, py-trello, requests-oauthlib, safety
 safety==1.8.5
 six==1.14.0               # via astroid, dparse, packaging, python-dateutil
 testfixtures==6.11.0
-typed-ast==1.4.0          # via mypy
+typed-ast==1.4.1          # via mypy
 typing-extensions==3.7.4.1  # via mypy
 urllib3==1.25.7           # via requests
 wrapt==1.11.2             # via astroid
