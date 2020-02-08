@@ -13,6 +13,7 @@ pip3 : update_pip_tool
 update_pip3 : update_pip_tool
 	echo "##### UPDATE REQUIREMENTS ######"
 	pip install pip-tools -U
+	rm requirements.txt
 	pip-compile --output-file requirements.txt requirements.in
 	pip-sync
 
