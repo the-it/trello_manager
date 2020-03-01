@@ -31,7 +31,7 @@ python-dateutil==2.8.1    # via py-trello
 pytz==2019.3
 pyyaml==5.3               # via dparse
 requests-oauthlib==1.3.0  # via py-trello
-requests==2.22.0          # via codecov, py-trello, requests-oauthlib, safety
+requests==2.23.0          # via codecov, py-trello, requests-oauthlib, safety
 safety==1.8.5
 six==1.14.0               # via astroid, dparse, packaging, python-dateutil
 testfixtures==6.12.0
