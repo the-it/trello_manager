@@ -34,28 +34,28 @@ data "aws_iam_policy_document" "allow_lambda_exec_document" {
 
 resource "aws_iam_role" "lambda_role" {
   name = "trello-manager-lambda-role"
-  assume_role_policy = "${data.aws_iam_policy_document.lambda_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_policy.json
 }
 
 resource "aws_iam_role_policy" "lambda_exec" {
   name = "trello-manager-lambda-exec"
-  policy = "${data.aws_iam_policy_document.allow_lambda_exec_document.json}"
-  role = "${aws_iam_role.lambda_role.id}"
+  policy = data.aws_iam_policy_document.allow_lambda_exec_document.json
+  role = aws_iam_role.lambda_role.id
 }
 
 resource "aws_lambda_function" "lambda_function" {
   filename = "zip/lambda-${var.lambda_version}.zip"
   description = "Moving some Tasks from A to B."
   function_name = "trello-manager"
-  role = "${aws_iam_role.lambda_role.arn}"
+  role = aws_iam_role.lambda_role.arn
   handler = "lambda_handler.lambda_handler"
   runtime = "python3.8"
   timeout = 120
   reserved_concurrent_executions = 1
   environment {
     variables = {
-      TRELLO_API_KEY = "${var.trello_key}",
-      TRELLO_API_SECRET = "${var.trello_secret}",
+      TRELLO_API_KEY = var.trello_key,
+      TRELLO_API_SECRET = var.trello_secret,
     }
   }
 }
@@ -68,15 +68,15 @@ resource "aws_cloudwatch_event_rule" "scheduled_rule" {
 
 resource "aws_lambda_permission" "lambda_permission" {
   action = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.lambda_function.function_name}"
+  function_name = aws_lambda_function.lambda_function.function_name
   principal = "events.amazonaws.com"
   statement_id = "AllowExecutionForTrigger"
-  source_arn = "${aws_cloudwatch_event_rule.scheduled_rule.arn}"
+  source_arn = aws_cloudwatch_event_rule.scheduled_rule.arn
 }
 
 resource "aws_cloudwatch_event_target" "scheduled_rule_target" {
-  arn = "${aws_lambda_function.lambda_function.arn}"
-  rule = "${aws_cloudwatch_event_rule.scheduled_rule.name}"
+  arn = aws_lambda_function.lambda_function.arn
+  rule = aws_cloudwatch_event_rule.scheduled_rule.name
 }
 
 resource "aws_cloudwatch_log_group" "log_group" {
