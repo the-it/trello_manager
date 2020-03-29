@@ -101,12 +101,17 @@ class ReplayDateTask(TrelloManager):
         super().__init__()
         self.todo_list: List = self.get_list_by_name("ToDo")
         self.replay_list: List = self.get_list_by_name("Replay")
+        self.dailys_list: List = self.get_list_by_name("Dailys")
         self.backlog_list: List = self.get_list_by_name("Backlog")
         self.labels: typing.List[Label] = self.board.get_labels()
         self.replay_label: Label = None
+        self.dailys_label: Label = None
         for label in self.labels:
             if label.name == "replay":
                 self.replay_label = label
+            elif label.name == "dailys":
+                self.dailys_label = label
+            if self.replay_label and self.dailys_label:
                 break
         self.today: datetime = datetime.now().replace(tzinfo=UTC)
 
@@ -121,17 +126,22 @@ class ReplayDateTask(TrelloManager):
     def _extract_from_archive(self):
         print("Processing closed Cards")
         for card in self.todo_list.list_cards(card_filter="closed"):
-            if card.labels and self.replay_label in card.labels:
-                print(f"openning Card {card}")
-                card.change_list(self.replay_list.id)
-                card.set_closed(False)
-                replay_hit = re.search(r".*\((\d{1,3}) d\)", card.name)
-                try:
-                    replay_time = int(replay_hit.group(1))
-                except AttributeError:
-                    print("ERROR: No valid duration in card name")
-                    continue
-                card.set_due(self.today + timedelta(days=replay_time))
+            if card.labels:
+                if self.replay_label in card.labels:
+                    print(f"openning Card {card}")
+                    card.change_list(self.replay_list.id)
+                    card.set_closed(False)
+                    replay_hit = re.search(r".*\((\d{1,3}) d\)", card.name)
+                    try:
+                        replay_time = int(replay_hit.group(1))
+                    except AttributeError:
+                        print("ERROR: No valid duration in card name")
+                        continue
+                    card.set_due(self.today + timedelta(days=replay_time))
+                elif self.dailys_label in card.labels:
+                    print(f"openning Card {card}")
+                    card.change_list(self.dailys_list.id)
+                    card.set_closed(False)
 
     @staticmethod
     def _sort_replay(list_to_sort: List):
