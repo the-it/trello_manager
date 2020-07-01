@@ -44,7 +44,7 @@ typed-ast==1.4.1          # via mypy
 typing-extensions==3.7.4.2  # via mypy
 urllib3==1.25.9           # via requests
 virtualenv-clone==0.5.4   # via pipenv
-virtualenv==20.0.15       # via pipenv
+virtualenv==20.0.25       # via pipenv
 wrapt==1.11.2             # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
