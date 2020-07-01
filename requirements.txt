@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
-appdirs==1.4.3            # via virtualenv
+appdirs==1.4.4            # via virtualenv
 astroid==2.3.3            # via pylint
 certifi==2019.11.28       # via pipenv, requests
 chardet==3.0.4            # via requests
