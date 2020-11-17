@@ -4,7 +4,7 @@ clean-pyc :
 
 update_pip_tool :
 	echo "########## UPDATE PIP ##########"
-	pip install --upgrade pip
+	pip3 install --upgrade pip
 
 pip3 : update_pip_tool
 	echo "##### INSTALL REQUIREMENTS #####"
@@ -12,7 +12,7 @@ pip3 : update_pip_tool
 
 update_pip3 : update_pip_tool
 	echo "##### UPDATE REQUIREMENTS ######"
-	pip install pip-tools -U
+	pip3 install pip-tools -U
 	rm requirements.txt
 	pip-compile --output-file requirements.txt requirements.in
 	pip-sync
