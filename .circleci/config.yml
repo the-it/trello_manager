@@ -215,4 +215,4 @@ workflows:
             - plan
           filters:
             branches:
-              only: master
+              only: main
