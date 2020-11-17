@@ -64,7 +64,7 @@ class ShoppingTask(TrelloManager):
     def _sort_list(self, card_list: List):
         cards = card_list.list_cards()
         self.printer.pprint(cards)
-        cards = sorted(cards, key=lambda list_card: list_card.name.lower())   # type: ignore
+        cards = sorted(cards, key=lambda list_card: list_card.name.lower())  # type: ignore
         for idx, card in enumerate(cards):
             card.set_pos(idx + 1)
 
@@ -165,7 +165,7 @@ class ReplayDateTask(TrelloManager):
         self.printer.pprint(cards_with_due)
         for card in cards_with_due:
             if card.due_date.replace(tzinfo=UTC) < \
-                self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
+                    self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
                 card.change_list(self.todo_list.id)
 
 
