@@ -28,20 +28,22 @@ save_repo: &save_repo
 lambda_build: &lambda_build
   run:
     name: lambda build
-    command: |
-      ./run.sh build
+    command: ./run.sh build
+
+install_dep: &install_dep
+  run:
+    name: Install dependencies
+    command: yum install -y tar gzip
 
 push_tst: &push_tst
   run:
     name: push code to tst bucket
-    command: |
-      ./run.sh push tst
+    command: ./run.sh push tst
 
 push_prd: &push_prd
   run:
     name: push code to prd bucket
-    command: |
-      ./run.sh push prd
+    command: ./run.sh push prd
 
 save_workspace: &save_workspace
   persist_to_workspace:
@@ -148,12 +150,14 @@ build_steps: &build_steps
 
 push_tst_steps: &push_tst_steps
   steps:
+    - *install_dep
     - checkout
     - *restore_workspace
     - *push_tst
 
 push_prd_steps: &push_prd_steps
   steps:
+    - *install_dep
     - checkout
     - *restore_workspace
     - *push_prd
