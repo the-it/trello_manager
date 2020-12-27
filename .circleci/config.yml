@@ -5,6 +5,9 @@ references:
 python_image: &python_image
   circleci/python:3.8
 
+aws_image: &aws_image
+  amazon/aws-cli:latest
+
 working_directory: &working_directory
   ~/repo
 
@@ -27,6 +30,18 @@ lambda_build: &lambda_build
     name: lambda build
     command: |
       ./run.sh build
+
+push_tst: &push_tst
+  run:
+    name: push code to tst bucket
+    command: |
+      ./run.sh push tst
+
+push_prd: &push_prd
+  run:
+    name: push code to prd bucket
+    command: |
+      ./run.sh push prd
 
 save_workspace: &save_workspace
   persist_to_workspace:
@@ -131,6 +146,18 @@ build_steps: &build_steps
     - *lambda_build
     - *save_workspace
 
+push_tst_steps: &push_tst_steps
+  steps:
+    - checkout
+    - *restore_workspace
+    - *push_tst
+
+push_prd_steps: &push_prd_steps
+  steps:
+    - checkout
+    - *restore_workspace
+    - *push_prd
+
 # job definitions
 
 jobs:
@@ -146,6 +173,18 @@ jobs:
     working_directory: *working_directory
     <<: *build_steps
 
+  push_tst:
+    docker:
+      - image: *aws_image
+    working_directory: *working_directory
+    <<: *push_tst_steps
+
+  push_prd:
+    docker:
+      - image: *aws_image
+    working_directory: *working_directory
+    <<: *push_prd_steps
+
 # dependencies for the workflow
 
 workflows:
@@ -158,14 +197,14 @@ workflows:
           context: trello_deploy
           requires:
             - coverage
-#      - plan:
-#          context: trello_deploy
-#          requires:
-#            - build
-#      - apply:
-#          context: trello_deploy
-#          requires:
-#            - plan
-#          filters:
-#            branches:
-#              only: main
+      - push_tst:
+          context: trello_manager_push_tst
+          requires:
+            - build
+      - push_prd:
+          context: trello_manager_push_prd
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
