@@ -81,7 +81,11 @@ build)
     ;;
 push)
     ENV=${2:-}
-    export AWS_PROFILE="ersotech_aws_${ENV}_1"
+    if [ -z "${CIRCLECI+xxx}" ]; then
+        echo " LOCAL PUSH"
+        export AWS_PROFILE="ersotech_aws_${ENV}_1"
+    fi
+
     aws s3 cp ${ZIP_FOLDER}/${LAMBDA_NAME}.zip s3://trello-manager-code-${ENV}-1/${LAMBDA_NAME}.zip
     ;;
 *)
