@@ -5,9 +5,6 @@ references:
 python_image: &python_image
   circleci/python:3.8
 
-terraform_image: &terraform_image
-  hashicorp/terraform:light
-
 working_directory: &working_directory
   ~/repo
 
@@ -25,39 +22,21 @@ save_repo: &save_repo
     paths:
       - *working_directory
 
-terraform_build: &terraform_build
+lambda_build: &lambda_build
   run:
-    name: terraform build
+    name: lambda build
     command: |
-      ./build.sh
-
-install_dep: &install_dep
-  run:
-    name: Install Alpine dependencies
-    command: apk add bash
+      ./run.sh build
 
 save_workspace: &save_workspace
   persist_to_workspace:
-    root: terraform/zip
+    root: build/zip
     paths:
-      - lambda*.zip
-      - version.txt
+      - trello_manager.zip
 
 restore_workspace: &restore_workspace
   attach_workspace:
-    at: terraform/zip
-
-terraform_plan: &terraform_plan
-  run:
-    name: terraform plan
-    command: |
-      ./plan.sh
-
-terraform_apply: &terraform_apply
-  run:
-    name: terraform apply
-    command: |
-      ./apply.sh
+    at: build/zip
 
 install_dependencies: &install_dependencies
   run:
@@ -149,22 +128,8 @@ coverage_steps: &coverage_steps
 build_steps: &build_steps
   steps:
     - *restore_repo
-    - *terraform_build
+    - *lambda_build
     - *save_workspace
-
-plan_steps: &plan_steps
-  steps:
-    - *install_dep
-    - checkout
-    - *restore_workspace
-    - *terraform_plan
-
-apply_steps: &apply_steps
-  steps:
-    - *install_dep
-    - checkout
-    - *restore_workspace
-    - *terraform_apply
 
 # job definitions
 
@@ -181,18 +146,6 @@ jobs:
     working_directory: *working_directory
     <<: *build_steps
 
-  plan:
-    docker:
-      - image: *terraform_image
-    working_directory: *working_directory
-    <<: *plan_steps
-
-  apply:
-    docker:
-      - image: *terraform_image
-    working_directory: *working_directory
-    <<: *apply_steps
-
 # dependencies for the workflow
 
 workflows:
@@ -205,14 +158,14 @@ workflows:
           context: trello_deploy
           requires:
             - coverage
-      - plan:
-          context: trello_deploy
-          requires:
-            - build
-      - apply:
-          context: trello_deploy
-          requires:
-            - plan
-          filters:
-            branches:
-              only: main
+#      - plan:
+#          context: trello_deploy
+#          requires:
+#            - build
+#      - apply:
+#          context: trello_deploy
+#          requires:
+#            - plan
+#          filters:
+#            branches:
+#              only: main
