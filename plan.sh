@@ -10,8 +10,6 @@ VERSION=$(cat zip/version.txt)
 
 rm -rf .terraform
 terraform init
-terraform plan -var "lambda_version=${VERSION}" \
-               -var "trello_key=${TRELLO_API_KEY}" \
-               -var "trello_secret=${TRELLO_API_SECRET}"
+terraform plan -var "trello_key=${TRELLO_API_KEY}"   -var "trello_secret=${TRELLO_API_SECRET}"
 
 popd > /dev/null

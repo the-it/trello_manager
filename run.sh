@@ -9,24 +9,21 @@ SCRIPT_DIR=$(dirname "${CANONICAL_SCRIPT}")
 # build stuff
 LAMBDA_NAME=trello_manager
 WORK_DIR="${SCRIPT_DIR}/build"
-VERSION=`date '+%Y%m%d_%H%M%S'`
-ZIP_FOLDER="${SCRIPT_DIR}/terraform/zip"
+ZIP_FOLDER="${WORK_DIR}/zip"
 VENV_FOLDER="${WORK_DIR}/venv"
 TARGET_TMP="${WORK_DIR}/target"
 
 error_exit() {
-	echo "ERROR: $1" >&2
-	exit 4
+    echo "ERROR: $1" >&2
+    exit 4
 }
 
 exit_with_usage() {
-	cat <<EOF
+    cat <<EOF
     ${BASENAME} <command>
 
 available commands:
-terraform
-    plan
-    apply
+terraform <tst/prd>
 build
 EOF
     exit 1
@@ -42,7 +39,29 @@ function get_version() {
 
 function build() {
     VERSION=`get_version`
-    echo $VERSION
+
+    # Cleanup temp folders
+    rm -rf ${WORK_DIR}
+    mkdir -p ${ZIP_FOLDER}
+    mkdir -p ${TARGET_TMP}
+
+    # Install proper dependencies
+    python3 -m venv ${VENV_FOLDER}
+    source ${VENV_FOLDER}/bin/activate
+    pip install -r requirements.txt
+    deactivate
+
+    # copy all relevant files to the temporary target folder
+    cp -r ${VENV_FOLDER}/lib/python3.*/site-packages/* ${TARGET_TMP}
+    cp -r src/* ${TARGET_TMP}
+    echo "${VERSION}" > ${TARGET_TMP}/version.txt
+
+    # zip to nice little package
+    pushd ${TARGET_TMP}
+    zip -r ${LAMBDA_NAME}.zip .
+    mv ${LAMBDA_NAME}.zip "${ZIP_FOLDER}"
+    echo "Created ${LAMBDA_NAME}.zip for ${LAMBDA_NAME}"
+    popd
 }
 
 pushd "${SCRIPT_DIR}" > /dev/null
@@ -50,25 +69,19 @@ OPERATION=${1:-}
 
 case ${OPERATION} in
 terraform)
-    COMMAND=${2:-}
-    case ${COMMAND} in
-	apply)
-		echo "apply"
-		;;
-	plan)
-		echo "plan"
-		;;
-	*)
-		exit_with_usage
-		;;
-	esac
-	;;
+    ENV=${2:-}
+    pushd "terraform/${ENV}" > /dev/null
+    terraform init
+    terraform apply -var "trello_key=${TRELLO_API_KEY}"   -var "trello_secret=${TRELLO_API_SECRET}"
+
+    popd > /dev/null
+    ;;
 build)
-	build
-	;;
+    build
+    ;;
 *)
-	exit_with_usage
-	;;
+    exit_with_usage
+    ;;
 esac
 
 popd > /dev/null
