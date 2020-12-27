@@ -79,6 +79,11 @@ terraform)
 build)
     build
     ;;
+push)
+    ENV=${2:-}
+    export AWS_PROFILE="ersotech_aws_${ENV}_1"
+    aws s3 cp ${ZIP_FOLDER}/${LAMBDA_NAME}.zip s3://trello-manager-code-${ENV}-1/${LAMBDA_NAME}.zip
+    ;;
 *)
     exit_with_usage
     ;;

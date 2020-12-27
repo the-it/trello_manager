@@ -198,7 +198,6 @@ workflows:
       - coverage:
           context: trello
       - build:
-          context: trello_deploy
           requires:
             - coverage
       - push_tst:
