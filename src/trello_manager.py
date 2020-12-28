@@ -1,5 +1,4 @@
 import os
-import pprint
 import re
 import typing
 from datetime import datetime, timedelta
@@ -25,7 +24,6 @@ class TrelloManager:  # pylint: disable=too-few-public-methods
         self.board: Board = self._init_board(self._board_name)
         if not self.board:
             raise TrelloExecption("Board {} doesn't exists.".format(self._board_name))
-        self.printer: pprint.PrettyPrinter = pprint.PrettyPrinter(indent=2)
 
     def _init_board(self, board_name: str) -> typing.Union[Board, None]:
         for board in self.client.list_boards():
@@ -54,16 +52,15 @@ class ShoppingTask(TrelloManager):
 
     def run(self):
         cards = self._get_archived_cards()
-        self.printer.pprint(cards)
         self._move_to_category(cards)
         for list_str in self.lists:
             print(f"Sorting list {list_str}")
             card_list = self.get_list_by_name(f"Gerade nicht kaufen ({list_str})")
             self._sort_list(card_list)
 
-    def _sort_list(self, card_list: List):
+    @staticmethod
+    def _sort_list(card_list: List):
         cards = card_list.list_cards()
-        self.printer.pprint(cards)
         cards = sorted(cards, key=lambda list_card: list_card.name.lower())  # type: ignore
         for idx, card in enumerate(cards):
             card.set_pos(idx + 1)
@@ -162,7 +159,6 @@ class ReplayDateTask(TrelloManager):
     def _put_to_todo(self, list_to_move: List):
         print(f"Moving Cards on board {list_to_move} to todo list")
         cards_with_due = ReplayDateTask.get_cards_with_due(list_to_move)
-        self.printer.pprint(cards_with_due)
         for card in cards_with_due:
             if card.due_date.replace(tzinfo=UTC) < \
                     self.today.replace(tzinfo=UTC) + timedelta(days=self._DAYS_FOR_TODO):
