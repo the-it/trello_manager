@@ -58,7 +58,8 @@ class ShoppingTask(TrelloManager):
             card_list = self.get_list_by_name(f"Gerade nicht kaufen ({list_str})")
             self._sort_list(card_list)
 
-    def _sort_list(self, card_list: List):
+    @staticmethod
+    def _sort_list(card_list: List):
         cards = card_list.list_cards()
         cards = sorted(cards, key=lambda list_card: list_card.name.lower())  # type: ignore
         for idx, card in enumerate(cards):
