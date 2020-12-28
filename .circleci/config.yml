@@ -61,7 +61,7 @@ install_dependencies: &install_dependencies
     command: |
       python3 -m venv venv
       . venv/bin/activate
-      make pip3
+      make pip3-dev
       pip list
 
 run_coverage: &run_coverage
