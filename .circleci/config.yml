@@ -5,8 +5,8 @@ references:
 python_image: &python_image
   circleci/python:3.8
 
-terraform_image: &terraform_image
-  hashicorp/terraform:light
+aws_image: &aws_image
+  amazon/aws-cli:latest
 
 working_directory: &working_directory
   ~/repo
@@ -25,39 +25,35 @@ save_repo: &save_repo
     paths:
       - *working_directory
 
-terraform_build: &terraform_build
+lambda_build: &lambda_build
   run:
-    name: terraform build
-    command: |
-      ./build.sh
+    name: lambda build
+    command: ./run.sh build
 
 install_dep: &install_dep
   run:
-    name: Install Alpine dependencies
-    command: apk add bash
+    name: Install dependencies
+    command: yum install -y tar gzip
+
+push_tst: &push_tst
+  run:
+    name: push code to tst bucket
+    command: ./run.sh push tst
+
+push_prd: &push_prd
+  run:
+    name: push code to prd bucket
+    command: ./run.sh push prd
 
 save_workspace: &save_workspace
   persist_to_workspace:
-    root: terraform/zip
+    root: build/zip
     paths:
-      - lambda*.zip
-      - version.txt
+      - trello_manager.zip
 
 restore_workspace: &restore_workspace
   attach_workspace:
-    at: terraform/zip
-
-terraform_plan: &terraform_plan
-  run:
-    name: terraform plan
-    command: |
-      ./plan.sh
-
-terraform_apply: &terraform_apply
-  run:
-    name: terraform apply
-    command: |
-      ./apply.sh
+    at: build/zip
 
 install_dependencies: &install_dependencies
   run:
@@ -149,22 +145,22 @@ coverage_steps: &coverage_steps
 build_steps: &build_steps
   steps:
     - *restore_repo
-    - *terraform_build
+    - *lambda_build
     - *save_workspace
 
-plan_steps: &plan_steps
+push_tst_steps: &push_tst_steps
   steps:
     - *install_dep
     - checkout
     - *restore_workspace
-    - *terraform_plan
+    - *push_tst
 
-apply_steps: &apply_steps
+push_prd_steps: &push_prd_steps
   steps:
     - *install_dep
     - checkout
     - *restore_workspace
-    - *terraform_apply
+    - *push_prd
 
 # job definitions
 
@@ -181,17 +177,17 @@ jobs:
     working_directory: *working_directory
     <<: *build_steps
 
-  plan:
+  push_tst:
     docker:
-      - image: *terraform_image
+      - image: *aws_image
     working_directory: *working_directory
-    <<: *plan_steps
+    <<: *push_tst_steps
 
-  apply:
+  push_prd:
     docker:
-      - image: *terraform_image
+      - image: *aws_image
     working_directory: *working_directory
-    <<: *apply_steps
+    <<: *push_prd_steps
 
 # dependencies for the workflow
 
@@ -202,17 +198,16 @@ workflows:
       - coverage:
           context: trello
       - build:
-          context: trello_deploy
           requires:
             - coverage
-      - plan:
-          context: trello_deploy
+      - push_tst:
+          context: trello_manager_push_tst
           requires:
             - build
-      - apply:
-          context: trello_deploy
+      - push_prd:
+          context: trello_manager_push_prd
           requires:
-            - plan
+            - build
           filters:
             branches:
               only: main
