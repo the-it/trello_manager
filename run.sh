@@ -90,7 +90,8 @@ push)
     aws lambda update-function-code \
         --function-name trello-manager \
         --s3-bucket trello-manager-code-${ENV}-1 \
-        --s3-key trello_manager.zip
+        --s3-key trello_manager.zip \
+        --region eu-central-1
     ;;
 *)
     exit_with_usage
