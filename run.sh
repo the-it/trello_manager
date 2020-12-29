@@ -60,7 +60,7 @@ function build() {
     pushd ${TARGET_TMP}
     zip -r ${LAMBDA_NAME}.zip .
     mv ${LAMBDA_NAME}.zip "${ZIP_FOLDER}"
-    echo "Created ${LAMBDA_NAME}.zip for ${LAMBDA_NAME}"
+    echo "Created ${LAMBDA_NAME}.zip for ${LAMBDA_NAME} with version ${VERSION}"
     popd
 }
 
@@ -87,6 +87,12 @@ push)
     fi
 
     aws s3 cp ${ZIP_FOLDER}/${LAMBDA_NAME}.zip s3://trello-manager-code-${ENV}-1/${LAMBDA_NAME}.zip
+    aws lambda update-function-code \
+        --function-name trello-manager \
+        --s3-bucket trello-manager-code-${ENV}-1 \
+        --s3-key trello_manager.zip \
+        --region eu-central-1 \
+        --output text
     ;;
 *)
     exit_with_usage
