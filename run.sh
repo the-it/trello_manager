@@ -60,7 +60,7 @@ function build() {
     pushd ${TARGET_TMP}
     zip -r ${LAMBDA_NAME}.zip .
     mv ${LAMBDA_NAME}.zip "${ZIP_FOLDER}"
-    echo "Created ${LAMBDA_NAME}.zip for ${LAMBDA_NAME}"
+    echo "Created ${LAMBDA_NAME}.zip for ${LAMBDA_NAME} with version ${VERSION}"
     popd
 }
 
