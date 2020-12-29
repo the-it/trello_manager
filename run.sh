@@ -87,6 +87,10 @@ push)
     fi
 
     aws s3 cp ${ZIP_FOLDER}/${LAMBDA_NAME}.zip s3://trello-manager-code-${ENV}-1/${LAMBDA_NAME}.zip
+    aws lambda update-function-code \
+        --function-name trello-manager \
+        --s3-bucket trello-manager-code-${ENV}-1 \
+        --s3-key trello_manager.zip
     ;;
 *)
     exit_with_usage
