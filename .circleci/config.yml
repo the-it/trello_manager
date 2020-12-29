@@ -3,16 +3,16 @@ version: 2.1
 references:
 
 python_image: &python_image
-  circleci/python:3.8
+                circleci/python:3.8
 
 aws_image: &aws_image
-  amazon/aws-cli:latest
+             amazon/aws-cli:latest
 
 working_directory: &working_directory
-  ~/repo
+                     ~/repo
 
 repo_cache_key: &repo_cache_key
-  v3-repo-{{ .Branch }}-{{ .Revision }}
+                  v3-repo-{{ .Branch }}-{{ .Revision }}
 
 # Step to restore repository from cache
 restore_repo: &restore_repo
@@ -201,11 +201,15 @@ workflows:
           requires:
             - coverage
       - push_tst:
-          context: trello_manager_push_tst
+          context:
+            - trello
+            - trello_manager_push_tst
           requires:
             - build
       - push_prd:
-          context: trello_manager_push_prd
+          context:
+            - trello
+            - trello_manager_push_prd
           requires:
             - build
           filters:

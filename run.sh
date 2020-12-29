@@ -91,7 +91,8 @@ push)
         --function-name trello-manager \
         --s3-bucket trello-manager-code-${ENV}-1 \
         --s3-key trello_manager.zip \
-        --region eu-central-1
+        --region eu-central-1 \
+        --output text
     ;;
 *)
     exit_with_usage
