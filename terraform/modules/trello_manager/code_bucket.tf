@@ -53,7 +53,7 @@ data "aws_iam_policy_document" "code_uploader_policy_data" {
         ]
 
         resources = [
-            "${aws_lambda_function.lambda_function.arn}",
+            aws_lambda_function.lambda_function.arn,
         ]
     }
 }
