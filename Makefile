@@ -69,6 +69,6 @@ clean : clean-pyc clean-coverage
 
 quality : safety flake8 pycodestyle pylint mypy
 
-pre-commit : pip3 quality unittest
+pre-commit : update_pip3 quality unittest
 
 .PHONY : clean, pre-commit quality
