@@ -24,7 +24,7 @@ flake8==3.9.0
     # via -r requirements-dev.in
 idna==3.1
     # via requests
-isort==5.7.0
+isort==5.8.0
     # via pylint
 lazy-object-proxy==1.4.3
     # via astroid
