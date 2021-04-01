@@ -20,7 +20,7 @@ coverage==5.5
     #   codecov
 dparse==0.5.1
     # via safety
-flake8==3.8.4
+flake8==3.9.0
     # via -r requirements-dev.in
 idna==2.10
     # via requests
