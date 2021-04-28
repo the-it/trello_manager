@@ -117,7 +117,7 @@ class ReplayDateTask(TrelloManager):
         self._put_to_todo(self.replay_list)
         self._put_to_todo(self.backlog_list)
         self._sort_replay(self.replay_list)
-        self._sort_replay(self.todo_list)
+        # self._sort_replay(self.todo_list)
         self._sort_replay(self.backlog_list)
 
     def _extract_from_archive(self):
