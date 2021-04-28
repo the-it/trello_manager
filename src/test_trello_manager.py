@@ -168,9 +168,9 @@ class TestReplayDateTask(TrelloTest):
 
         todo_cards = self.list_todo.list_cards()
         compare(2, len(todo_cards))
-        compare("Test_Get_From_Archive_3 (wrong timedelta)", todo_cards[0].name)
-        compare(self.now.date(), todo_cards[0].due_date.date())
-        compare("Test_Stay_On_Board (20 d)", todo_cards[1].name)
+        compare("Test_Stay_On_Board (20 d)", todo_cards[0].name)
+        compare("Test_Get_From_Archive_3 (wrong timedelta)", todo_cards[1].name)
+        compare(self.now.date(), todo_cards[1].due_date.date())
 
         replay_cards = self.list_replay.list_cards()
         compare(2, len(replay_cards))
@@ -216,8 +216,8 @@ class TestReplayDateTask(TrelloTest):
         compare(4, len(todo_cards))
         compare("Test_To_Todo_2 (20 d)", todo_cards[0].name)
         compare("Test_To_Todo_3", todo_cards[1].name)
-        compare("Test_To_Todo_1 (20 d)", todo_cards[2].name)
-        compare("Just_a_card", todo_cards[3].name)
+        compare("Just_a_card", todo_cards[2].name)
+        compare("Test_To_Todo_1 (20 d)", todo_cards[3].name)
 
     def test_fetch_dailys_from_archive(self):
         self.list_todo.add_card("Test_Get_From_Archive_1", labels=[self.label_dailys])
