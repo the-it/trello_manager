@@ -22,7 +22,7 @@ dparse==0.5.1
     # via safety
 flake8==3.9.1
     # via -r requirements-dev.in
-idna==2.10
+idna==3.1
     # via requests
 isort==5.8.0
     # via pylint
