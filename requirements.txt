@@ -26,5 +26,5 @@ requests==2.25.1
     #   requests-oauthlib
 six==1.15.0
     # via python-dateutil
-urllib3==1.26.4
+urllib3==1.26.5
     # via requests
