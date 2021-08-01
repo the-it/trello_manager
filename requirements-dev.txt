@@ -54,7 +54,7 @@ pytz==2021.1
     # via -r requirements-dev.in
 pyyaml==5.4.1
     # via dparse
-requests==2.25.1
+requests==2.26.0
     # via
     #   codecov
     #   safety
