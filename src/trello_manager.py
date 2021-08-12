@@ -24,6 +24,7 @@ class TrelloManager:  # pylint: disable=too-few-public-methods
         self.board: Board = self._init_board(self._board_name)
         if not self.board:
             raise TrelloExecption("Board {} doesn't exists.".format(self._board_name))
+        self.labels: typing.List[Label] = self.board.get_labels()
 
     def _init_board(self, board_name: str) -> typing.Union[Board, None]:
         for board in self.client.list_boards():
@@ -100,7 +101,6 @@ class ReplayDateTask(TrelloManager):
         self.replay_list: List = self.get_list_by_name("Replay")
         self.dailys_list: List = self.get_list_by_name("Dailys")
         self.backlog_list: List = self.get_list_by_name("Backlog")
-        self.labels: typing.List[Label] = self.board.get_labels()
         self.replay_label: Label = None
         self.dailys_label: Label = None
         for label in self.labels:
@@ -165,5 +165,43 @@ class ReplayDateTask(TrelloManager):
                 card.change_list(self.todo_list.id)
 
 
+class DailyWorkTodos(TrelloManager):
+    _board_name = "Arbeit"
+
+    def __init__(self):
+        super().__init__()
+        self.orga_label: Label = None
+        for label in self.labels:
+            if label.name == "Orga":
+                self.orga_label = label
+            if self.orga_label:
+                break
+
+    def run(self):
+        self.create_daily_todo()
+
+    def create_daily_todo(self) -> None:
+        work_list: List = self.get_list_by_name("Im Gange")
+        tomorrow: datetime = datetime.today() + timedelta(days=1)
+        # skip the creation of this task on the weekends
+        if tomorrow.weekday() in (5, 6):
+            print("It's a weekend, no need for a todo card")
+            return
+        print(f"Creating todo card for: DAILYS {tomorrow.strftime('%a')}")
+        new_todos: Card = work_list.add_card(f"DAILYS {tomorrow.strftime('%a')}")
+        new_todos.set_pos(0)
+        checklist = [
+            "calendar https://calendar.google.com/calendar/u/0/r",
+            "plan day",
+            "15-five update https://grafana.15five.com/profile/highlights/",
+            "Mails https://mail.google.com/mail/u/0/#inbox",
+            "Slack https://raintank-corp.slack.com/",
+            "Github board https://github.com/orgs/grafana/projects/15",
+            "read PR's https://github.com/pulls/review-requested"
+        ]
+        new_todos.add_checklist("TODO", checklist)
+        new_todos.add_label(self.orga_label)
+
+
 if __name__ == "__main__":  # pragma: no cover
-    ReplayDateTask().run()
+    DailyWorkTodos().run()

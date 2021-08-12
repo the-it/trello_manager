@@ -4,10 +4,11 @@ from datetime import datetime, timedelta
 from time import sleep
 from unittest import TestCase
 
+from freezegun import freeze_time
 from testfixtures import compare
 from trello import TrelloClient
 
-from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask
+from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask, DailyWorkTodos
 
 TEST_BOARD = "UNITTEST"
 TEST_KEY = "TRELLO_API_KEY_TEST"
@@ -239,3 +240,33 @@ class TestReplayDateTask(TrelloTest):
         closed_cards = self.board.closed_cards()
         compare(1, len(closed_cards))
         compare("Test_Stay_In_Archive", closed_cards[0].name)
+
+
+class TestDailyWorkTodos(TrelloTest):
+    DailyWorkTodos._board_name = TEST_BOARD
+    DailyWorkTodos._key = TEST_KEY
+    DailyWorkTodos._secret = TEST_SECRET
+
+    def setUp(self):
+        super().setUp()
+        self.list_todo = self.board.add_list("Im Gange")
+        self.label_replay = self.board.add_label("Orga", "purple")
+        self.task = DailyWorkTodos()
+
+    @freeze_time("2021-08-12")
+    def test_create_daily_todos(self):
+        self.task.run()
+
+        todo_cards = self.list_todo.list_cards()
+        compare(1, len(todo_cards))
+        compare("DAILYS Fri", todo_cards[0].name)
+        compare(7, len(todo_cards[0].checklists[0].items))
+        compare(self.label_replay, todo_cards[0].labels[0])
+
+    @freeze_time("2021-08-13")
+    def test_no_todos_on_the_weekend(self):
+        self.task.run()
+
+        todo_cards = self.list_todo.list_cards()
+        # no cards for the weekend
+        compare(0, len(todo_cards))
