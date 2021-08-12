@@ -1,8 +1,9 @@
 coverage
 codecov
 flake8
+freezegun
 mypy
-nose
+nose2
 pylint
 pytz
 safety

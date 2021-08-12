@@ -25,7 +25,7 @@ update_pip3 : update_pip_tool
 
 unittest :
 	echo "########### UNITTEST ###########"
-	venv/bin/nosetests
+	venv/bin/nose2 -v
 
 safety :
 	echo "############ SAFETY ############"
@@ -49,7 +49,7 @@ mypy :
 
 coverage : clean-coverage
 	echo "########### COVERAGE ###########"
-	venv/bin/nosetests --with-coverage && \
+	venv/bin/nose2 --with-coverage && \
 	coverage xml
 
 clean-coverage :
