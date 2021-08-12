@@ -1,4 +1,4 @@
-from trello_manager import ReplayDateTask, ShoppingTask
+from trello_manager import ReplayDateTask, ShoppingTask, DailyWorkTodos
 
 
 def lambda_handler(event, _):  # pylint: disable=unused-argument
@@ -15,3 +15,5 @@ def lambda_handler(event, _):  # pylint: disable=unused-argument
     ReplayDateTask().run()
     print("Get the Shopping Cards from the archive and sort them")
     ShoppingTask().run()
+    print("Create Daily Todo Card for Work")
+    DailyWorkTodos().run()
