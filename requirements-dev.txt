@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in
 #
-astroid==2.6.6
+astroid==2.7.3
     # via pylint
 certifi==2021.5.30
     # via requests
@@ -45,11 +45,13 @@ packaging==21.0
     # via
     #   dparse
     #   safety
+platformdirs==2.3.0
+    # via pylint
 pycodestyle==2.7.0
     # via flake8
 pyflakes==2.3.1
     # via flake8
-pylint==2.9.6
+pylint==2.10.2
     # via -r requirements-dev.in
 pyparsing==2.4.7
     # via packaging
@@ -69,14 +71,14 @@ six==1.16.0
     # via
     #   nose2
     #   python-dateutil
-testfixtures==6.18.0
+testfixtures==6.18.1
     # via -r requirements-dev.in
 toml==0.10.2
     # via
     #   dparse
     #   mypy
     #   pylint
-typing-extensions==3.10.0.0
+typing-extensions==3.10.0.2
     # via mypy
 urllib3==1.26.6
     # via requests

@@ -193,6 +193,7 @@ class DailyWorkTodos(TrelloManager):
         checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
             "plan day",
+            "1-hour training",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",

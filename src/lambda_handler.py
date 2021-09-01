@@ -7,7 +7,7 @@ def lambda_handler(event, _):  # pylint: disable=unused-argument
     The event is not picked up because lambda is cron triggered.
     """
     try:
-        with open("version.txt") as version_file:
+        with open("version.txt", encoding="utf-8") as version_file:
             print(f"Current running version is: {version_file.read()}")
     except FileNotFoundError:
         print("Local Development Mode")

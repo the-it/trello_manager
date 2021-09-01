@@ -119,9 +119,9 @@ class TestShoppingTask(TrelloTest):
         compare("Don't show", closed_cards[0].name)
 
     def test_sorting(self):
-        for category in {(self.list_lebensmittel, self.label_lebensmittel),
+        for category in ((self.list_lebensmittel, self.label_lebensmittel),
                          (self.list_drogerie, self.label_drogerie),
-                         (self.list_sonstiges, self.label_sonstiges)}:
+                         (self.list_sonstiges, self.label_sonstiges)):
             self.buy_list.add_card("Test_Item_4", labels=[category[1]])
             self.buy_list.add_card("Test_Item_2", labels=[category[1]])
             self.buy_list.add_card("Test_Item_0", labels=[category[1]])
@@ -260,7 +260,7 @@ class TestDailyWorkTodos(TrelloTest):
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
         compare("DAILYS Fri", todo_cards[0].name)
-        compare(7, len(todo_cards[0].checklists[0].items))
+        compare(8, len(todo_cards[0].checklists[0].items))
         compare(self.label_replay, todo_cards[0].labels[0])
 
     @freeze_time("2021-08-13")
