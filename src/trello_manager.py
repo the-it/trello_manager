@@ -23,7 +23,7 @@ class TrelloManager:  # pylint: disable=too-few-public-methods
         )
         self.board: Board = self._init_board(self._board_name)
         if not self.board:
-            raise TrelloExecption("Board {} doesn't exists.".format(self._board_name))
+            raise TrelloExecption(f"Board {self._board_name} doesn't exists.")
         self.labels: typing.List[Label] = self.board.get_labels()
 
     def _init_board(self, board_name: str) -> typing.Union[Board, None]:
@@ -67,13 +67,14 @@ class ShoppingTask(TrelloManager):
             card.set_pos(idx + 1)
 
     def _get_archived_cards(self) -> typing.Dict[str, typing.List[Card]]:
+        label_keys = self.label.keys()
         cards: typing.Dict[str, typing.List[Card]] = {}
         for key in self.label.values():
             cards[key] = []
         for card in self.board.closed_cards():
             if card.labels:
                 for label in card.labels:
-                    if label.name in self.label.keys():
+                    if label.name in label_keys:
                         cards[self.label[label.name]].append(card)
                         break
         return cards

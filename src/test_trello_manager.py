@@ -44,7 +44,7 @@ class TrelloTest(TestCase):
                 board_hit = board
                 break
         if board_hit and board_hit.name == TEST_BOARD:
-            self.client.fetch_json('boards/{}'.format(board_hit.id), http_method='DELETE')
+            self.client.fetch_json(f"boards/{board_hit.id}", http_method="DELETE")
 
 
 class TestTrelloManager(TrelloTest):
