@@ -4,11 +4,11 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in
 #
-astroid==2.7.3
+astroid==2.8.0
     # via pylint
 certifi==2021.5.30
     # via requests
-charset-normalizer==2.0.4
+charset-normalizer==2.0.6
     # via requests
 click==8.0.1
     # via safety
@@ -51,7 +51,7 @@ pycodestyle==2.7.0
     # via flake8
 pyflakes==2.3.1
     # via flake8
-pylint==2.10.2
+pylint==2.11.1
     # via -r requirements-dev.in
 pyparsing==2.4.7
     # via packaging
@@ -79,7 +79,10 @@ toml==0.10.2
     #   mypy
     #   pylint
 typing-extensions==3.10.0.2
-    # via mypy
+    # via
+    #   astroid
+    #   mypy
+    #   pylint
 urllib3==1.26.6
     # via requests
 wrapt==1.12.1

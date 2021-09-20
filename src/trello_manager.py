@@ -193,12 +193,14 @@ class DailyWorkTodos(TrelloManager):
         checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
             "plan day",
+            "30 Klimmzüge",
             "1-hour training",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",
             "Github board https://github.com/orgs/grafana/projects/15",
-            "read PR's https://github.com/pulls/review-requested"
+            "read PR's https://github.com/pulls/review-requested",
+            "Zeit buchen"
         ]
         new_todos.add_checklist("TODO", checklist)
         new_todos.add_label(self.orga_label)

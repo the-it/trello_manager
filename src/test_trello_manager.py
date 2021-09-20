@@ -260,7 +260,7 @@ class TestDailyWorkTodos(TrelloTest):
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
         compare("DAILYS Fri", todo_cards[0].name)
-        compare(8, len(todo_cards[0].checklists[0].items))
+        compare(10, len(todo_cards[0].checklists[0].items))
         compare(self.label_replay, todo_cards[0].labels[0])
 
     @freeze_time("2021-08-13")
