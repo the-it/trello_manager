@@ -249,8 +249,8 @@ class TestDailyWorkTodos(TrelloTest):
 
     def setUp(self):
         super().setUp()
-        self.list_todo = self.board.add_list("Im Gange")
-        self.label_replay = self.board.add_label("Orga", "purple")
+        self.list_todo = self.board.add_list("ToDo")
+        self.label_replay = self.board.add_label("Orga", "pink")
         self.task = DailyWorkTodos()
 
     @freeze_time("2021-08-12")
@@ -260,7 +260,7 @@ class TestDailyWorkTodos(TrelloTest):
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
         compare("DAILYS Fri", todo_cards[0].name)
-        compare(10, len(todo_cards[0].checklists[0].items))
+        compare(12, len(todo_cards[0].checklists[0].items))
         compare(self.label_replay, todo_cards[0].labels[0])
 
     @freeze_time("2021-08-13")

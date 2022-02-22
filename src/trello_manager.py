@@ -167,7 +167,7 @@ class ReplayDateTask(TrelloManager):
 
 
 class DailyWorkTodos(TrelloManager):
-    _board_name = "Arbeit"
+    _board_name = "Tasks"
 
     def __init__(self):
         super().__init__()
@@ -182,7 +182,7 @@ class DailyWorkTodos(TrelloManager):
         self.create_daily_todo()
 
     def create_daily_todo(self) -> None:
-        work_list: List = self.get_list_by_name("Im Gange")
+        work_list: List = self.get_list_by_name("ToDo")
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         # skip the creation of this task on the weekends
         if tomorrow.weekday() in (5, 6):
@@ -194,14 +194,16 @@ class DailyWorkTodos(TrelloManager):
         checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
             "plan day",
-            "1-hour training",
-            "1.5-hour grafana reading"
+            "2 h tech writing",
+            "1 h tech training",
+            "3 h programming",
+            "1 h orga",
+            "1.5-hour grafana reading",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",
             "Github board https://github.com/orgs/grafana/projects/15",
-            "read PR's https://github.com/pulls/review-requested",
-            "Zeit buchen"
+            "read PR's https://github.com/pulls/review-requested"
         ]
         new_todos.add_checklist("TODO", checklist)
         new_todos.add_label(self.orga_label)
