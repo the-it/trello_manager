@@ -147,10 +147,8 @@ class TestReplayDateTask(TrelloTest):
         super().setUp()
         self.list_todo = self.board.add_list("ToDo")
         self.list_replay = self.board.add_list("Replay")
-        self.list_dailys = self.board.add_list("Dailys")
         self.list_backlog = self.board.add_list("Backlog")
         self.label_replay = self.board.add_label("replay", "red")
-        self.label_dailys = self.board.add_label("dailys", "blue")
         self.task = ReplayDateTask()
         self.now = datetime.now()
 
