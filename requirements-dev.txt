@@ -4,64 +4,64 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in
 #
-astroid==2.8.0
+astroid==2.9.3
     # via pylint
-certifi==2021.5.30
+certifi==2021.10.8
     # via requests
-charset-normalizer==2.0.6
+charset-normalizer==2.0.12
     # via requests
-click==8.0.1
+click==8.0.4
     # via safety
 codecov==2.1.12
     # via -r requirements-dev.in
-coverage==5.5
+coverage==6.3.2
     # via
     #   -r requirements-dev.in
     #   codecov
     #   nose2
 dparse==0.5.1
     # via safety
-flake8==3.9.2
+flake8==4.0.1
     # via -r requirements-dev.in
 freezegun==1.1.0
     # via -r requirements-dev.in
-idna==3.2
+idna==3.3
     # via requests
-isort==5.9.3
+isort==5.10.1
     # via pylint
-lazy-object-proxy==1.6.0
+lazy-object-proxy==1.7.1
     # via astroid
 mccabe==0.6.1
     # via
     #   flake8
     #   pylint
-mypy==0.910
+mypy==0.931
     # via -r requirements-dev.in
 mypy-extensions==0.4.3
     # via mypy
-nose2==0.10.0
+nose2==0.11.0
     # via -r requirements-dev.in
-packaging==21.0
+packaging==21.3
     # via
     #   dparse
     #   safety
-platformdirs==2.3.0
+platformdirs==2.5.1
     # via pylint
-pycodestyle==2.7.0
+pycodestyle==2.8.0
     # via flake8
-pyflakes==2.3.1
+pyflakes==2.4.0
     # via flake8
-pylint==2.11.1
+pylint==2.12.2
     # via -r requirements-dev.in
-pyparsing==2.4.7
+pyparsing==3.0.7
     # via packaging
 python-dateutil==2.8.2
     # via freezegun
-pytz==2021.1
+pytz==2021.3
     # via -r requirements-dev.in
-pyyaml==5.4.1
+pyyaml==6.0
     # via dparse
-requests==2.26.0
+requests==2.27.1
     # via
     #   codecov
     #   safety
@@ -71,21 +71,22 @@ six==1.16.0
     # via
     #   nose2
     #   python-dateutil
-testfixtures==6.18.1
+testfixtures==6.18.4
     # via -r requirements-dev.in
 toml==0.10.2
     # via
     #   dparse
-    #   mypy
     #   pylint
-typing-extensions==3.10.0.2
+tomli==2.0.1
+    # via mypy
+typing-extensions==4.1.1
     # via
     #   astroid
     #   mypy
     #   pylint
-urllib3==1.26.6
+urllib3==1.26.8
     # via requests
-wrapt==1.12.1
+wrapt==1.13.3
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
