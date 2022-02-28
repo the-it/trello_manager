@@ -103,13 +103,9 @@ class ReplayDateTask(TrelloManager):
         self.dailys_list: List = self.get_list_by_name("Dailys")
         self.backlog_list: List = self.get_list_by_name("Backlog")
         self.replay_label: Label = None
-        self.dailys_label: Label = None
         for label in self.labels:
             if label.name == "replay":
                 self.replay_label = label
-            elif label.name == "dailys":
-                self.dailys_label = label
-            if self.replay_label and self.dailys_label:
                 break
         self.today: datetime = datetime.now().replace(tzinfo=UTC)
 
@@ -136,10 +132,6 @@ class ReplayDateTask(TrelloManager):
                         print("ERROR: No valid duration in card name")
                         continue
                     card.set_due(self.today + timedelta(days=replay_time))
-                elif self.dailys_label in card.labels:
-                    print(f"openning Card {card}")
-                    card.change_list(self.dailys_list.id)
-                    card.set_closed(False)
 
     @staticmethod
     def _sort_replay(list_to_sort: List):

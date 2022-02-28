@@ -220,27 +220,6 @@ class TestReplayDateTask(TrelloTest):
         compare("Just_a_card", todo_cards[2].name)
         compare("Test_To_Todo_1 (20 d)", todo_cards[3].name)
 
-    def test_fetch_dailys_from_archive(self):
-        self.list_todo.add_card("Test_Get_From_Archive_1", labels=[self.label_dailys])
-        self.list_todo.add_card("Test_Stay_In_Archive",
-                                due=(self.now + timedelta(days=1)).strftime(self._DATE_FORMAT))
-        self.list_todo.archive_all_cards()
-        self.list_todo.add_card("Test_Stay_On_Board", labels=[self.label_dailys])
-
-        self.task.run()
-
-        todo_cards = self.list_todo.list_cards()
-        compare(1, len(todo_cards))
-        compare("Test_Stay_On_Board", todo_cards[0].name)
-
-        daily_cards = self.list_dailys.list_cards()
-        compare(1, len(daily_cards))
-        compare("Test_Get_From_Archive_1", daily_cards[0].name)
-
-        closed_cards = self.board.closed_cards()
-        compare(1, len(closed_cards))
-        compare("Test_Stay_In_Archive", closed_cards[0].name)
-
 
 class TestDailyWorkTodos(TrelloTest):
     DailyWorkTodos._board_name = TEST_BOARD
