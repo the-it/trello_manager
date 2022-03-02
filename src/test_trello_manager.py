@@ -227,23 +227,40 @@ class TestDailyWorkTodos(TrelloTest):
     def setUp(self):
         super().setUp()
         self.list_todo = self.board.add_list("ToDo")
-        self.label_replay = self.board.add_label("Orga", "pink")
+        self.orga_label = self.board.add_label("Orga", "pink")
         self.task = DailyWorkTodos()
 
     @freeze_time("2021-08-12")
     def test_create_daily_todos(self):
-        self.task.run()
+        self.task.create_daily_todo()
 
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
         compare("DAILYS Fri", todo_cards[0].name)
         compare(12, len(todo_cards[0].checklists[0].items))
-        compare(self.label_replay, todo_cards[0].labels[0])
+        compare(self.orga_label, todo_cards[0].labels[0])
 
     @freeze_time("2021-08-13")
     def test_no_todos_on_the_weekend(self):
-        self.task.run()
+        self.task.create_daily_todo()
 
         todo_cards = self.list_todo.list_cards()
         # no cards for the weekend
+        compare(0, len(todo_cards))
+
+    @freeze_time("2021-01-31")
+    def test_expense_reminder(self):
+        self.task.create_monthly_expense_reminder()
+
+        todo_cards = self.list_todo.list_cards()
+        compare(1, len(todo_cards))
+        compare("DO EXPENSE REPORT", todo_cards[0].name)
+        self.assertTrue(len(todo_cards[0].checklists[0].items) > 0)
+        compare(self.orga_label, todo_cards[0].labels[0])
+
+    @freeze_time("2021-01-3")
+    def test_expense_reminder_only_on_the_first_of_month(self):
+        self.task.create_monthly_expense_reminder()
+
+        todo_cards = self.list_todo.list_cards()
         compare(0, len(todo_cards))

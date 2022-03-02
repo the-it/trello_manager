@@ -169,19 +169,34 @@ class DailyWorkTodos(TrelloManager):
                 self.orga_label = label
             if self.orga_label:
                 break
+        self.work_list: List = self.get_list_by_name("ToDo")
 
     def run(self):
         self.create_daily_todo()
+        self.create_monthly_expense_reminder()
+
+    def create_monthly_expense_reminder(self) -> None:
+        tomorrow: datetime = datetime.today() + timedelta(days=1)
+        if tomorrow.day == 1:
+            print("Creating expense reminder")
+            expense_reminder: Card = self.work_list.add_card("DO EXPENSE REPORT")
+            expense_reminder.set_pos(0)
+            checklist = [
+                "co-working space",
+                "travel stuff",
+                "other expenses"
+            ]
+            expense_reminder.add_checklist("TODO", checklist)
+            expense_reminder.add_label(self.orga_label)
 
     def create_daily_todo(self) -> None:
-        work_list: List = self.get_list_by_name("ToDo")
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         # skip the creation of this task on the weekends
         if tomorrow.weekday() in (5, 6):
             print("It's a weekend, no need for a todo card")
             return
         print(f"Creating todo card for: DAILYS {tomorrow.strftime('%a')}")
-        new_todos: Card = work_list.add_card(f"DAILYS {tomorrow.strftime('%a')}")
+        new_todos: Card = self.work_list.add_card(f"DAILYS {tomorrow.strftime('%a')}")
         new_todos.set_pos(0)
         checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",

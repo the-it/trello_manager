@@ -71,7 +71,7 @@ six==1.16.0
     # via
     #   nose2
     #   python-dateutil
-testfixtures==6.18.4
+testfixtures==6.18.5
     # via -r requirements-dev.in
 toml==0.10.2
     # via
