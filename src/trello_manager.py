@@ -201,15 +201,11 @@ class DailyWorkTodos(TrelloManager):
         checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
             "plan day",
-            "2 h tech writing",
-            "1 h tech training",
-            "3 h programming",
-            "1 h orga",
-            "1.5-hour grafana reading",
+            "0.5 h tech training",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",
-            "Github board https://github.com/orgs/grafana/projects/15",
+            "Github board https://github.com/orgs/grafana/projects/146",
             "read PR's https://github.com/pulls/review-requested"
         ]
         new_todos.add_checklist("TODO", checklist)
