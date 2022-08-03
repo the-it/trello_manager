@@ -49,7 +49,7 @@ mypy :
 
 coverage : clean-coverage
 	echo "########### COVERAGE ###########"
-	venv/bin/nose2 --with-coverage && \
+	nose2 --with-coverage && \
 	coverage xml
 
 clean-coverage :
