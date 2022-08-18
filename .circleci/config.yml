@@ -3,7 +3,7 @@ version: 2.1
 references:
 
 python_image: &python_image
-                circleci/python:3.8
+                circleci/python:3.9
 
 aws_image: &aws_image
              amazon/aws-cli:latest
