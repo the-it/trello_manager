@@ -173,19 +173,19 @@ class DailyWorkTodos(TrelloManager):
 
     def run(self):
         self.create_daily_todo()
-        self.create_monthly_expense_reminder()
+        self.create_monthly_reminder(title="DO EXPENSE REPORT",
+                                     day_of_month=1,
+                                     checklist=["co-working space", "travel stuff", "other expenses"])
+        self.create_monthly_reminder(title="Maintenance",
+                                     day_of_month=10,
+                                     checklist=["NAS", "DNS", "versions infrastructure repo"])
 
-    def create_monthly_expense_reminder(self) -> None:
+    def create_monthly_reminder(self, title: str, day_of_month: int, checklist: list[str]) -> None:
         tomorrow: datetime = datetime.today() + timedelta(days=1)
-        if tomorrow.day == 1:
-            print("Creating expense reminder")
-            expense_reminder: Card = self.work_list.add_card("DO EXPENSE REPORT")
+        if tomorrow.day == day_of_month:
+            print(f"Creating {title} monthly reminder")
+            expense_reminder: Card = self.work_list.add_card(title)
             expense_reminder.set_pos(0)
-            checklist = [
-                "co-working space",
-                "travel stuff",
-                "other expenses"
-            ]
             expense_reminder.add_checklist("TODO", checklist)
             expense_reminder.add_label(self.orga_label)
 
