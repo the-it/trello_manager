@@ -4,7 +4,6 @@ locals {
 
 provider "aws" {
   region = "eu-central-1"
-  shared_credentials_file = "~/.aws/creds"
   profile = "ersotech_aws_prd_1"
 }
 
@@ -36,4 +35,5 @@ output "code_uploader_id" {
 
 output "code_uploader_secret" {
     value = module.trello_manager.code_uploader_secret
+    sensitive = true
 }
