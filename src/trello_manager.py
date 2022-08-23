@@ -1,6 +1,6 @@
 import os
 import re
-import typing
+from typing import Optional, Union
 from datetime import datetime, timedelta
 
 from pytz import UTC
@@ -24,15 +24,15 @@ class TrelloManager:  # pylint: disable=too-few-public-methods
         self.board: Board = self._init_board(self._board_name)
         if not self.board:
             raise TrelloExecption(f"Board {self._board_name} doesn't exists.")
-        self.labels: typing.List[Label] = self.board.get_labels()
+        self.labels: list[Label] = self.board.get_labels()
 
-    def _init_board(self, board_name: str) -> typing.Union[Board, None]:
+    def _init_board(self, board_name: str) -> Union[Board, None]:
         for board in self.client.list_boards():
             if board_name == board.name:
                 return board
         return None
 
-    def get_list_by_name(self, name: str) -> typing.Union[List, None]:
+    def get_list_by_name(self, name: str) -> Union[List, None]:
         for trello_list in self.board.get_lists(None):
             if name == trello_list.name:
                 return trello_list
@@ -42,14 +42,14 @@ class TrelloManager:  # pylint: disable=too-few-public-methods
 class ShoppingTask(TrelloManager):
     _board_name: str = "Einkaufen"
 
-    label: typing.Dict[str, str] = {"Drogerie": "Drogerie",
-                                    "Lebensmittel": "Lebensmittel",
-                                    "Getränke": "Lebensmittel",
-                                    "Sonstiges": "Sonstiges"}
+    label: dict[str, str] = {"Drogerie": "Drogerie",
+                             "Lebensmittel": "Lebensmittel",
+                             "Getränke": "Lebensmittel",
+                             "Sonstiges": "Sonstiges"}
 
     def __init__(self):
         super().__init__()
-        self.lists: typing.Dict[str, List] = self._get_lists()
+        self.lists: dict[str, List] = self._get_lists()
 
     def run(self):
         cards = self._get_archived_cards()
@@ -66,9 +66,9 @@ class ShoppingTask(TrelloManager):
         for idx, card in enumerate(cards):
             card.set_pos(idx + 1)
 
-    def _get_archived_cards(self) -> typing.Dict[str, typing.List[Card]]:
+    def _get_archived_cards(self) -> dict[str, list[Card]]:
         label_keys = self.label.keys()
-        cards: typing.Dict[str, typing.List[Card]] = {}
+        cards: dict[str, list[Card]] = {}
         for key in self.label.values():
             cards[key] = []
         for card in self.board.closed_cards():
@@ -79,13 +79,13 @@ class ShoppingTask(TrelloManager):
                         break
         return cards
 
-    def _get_lists(self) -> typing.Dict[str, List]:
+    def _get_lists(self) -> dict[str, List]:
         lists = {}
         for list_name in self.label.values():
             lists[list_name] = self.get_list_by_name(f"Gerade nicht kaufen ({list_name})")
         return lists
 
-    def _move_to_category(self, card_dict: typing.Dict[str, typing.List[Card]]):
+    def _move_to_category(self, card_dict: dict[str, list[Card]]):
         for key in card_dict:
             for card in card_dict[key]:
                 card.change_list(self.lists[key].id)
@@ -142,7 +142,7 @@ class ReplayDateTask(TrelloManager):
             card.set_pos(0)
 
     @staticmethod
-    def get_cards_with_due(list_to_sort: List) -> typing.List[Card]:
+    def get_cards_with_due(list_to_sort: List) -> list[Card]:
         cards_with_due = []
         for card in list_to_sort.list_cards():
             if card.due_date:
@@ -158,7 +158,7 @@ class ReplayDateTask(TrelloManager):
                 card.change_list(self.todo_list.id)
 
 
-class DailyWorkTodos(TrelloManager):
+class SheduledTodos(TrelloManager):
     _board_name = "Tasks"
 
     def __init__(self):
@@ -172,33 +172,7 @@ class DailyWorkTodos(TrelloManager):
         self.work_list: List = self.get_list_by_name("ToDo")
 
     def run(self):
-        self.create_daily_todo()
-        self.create_monthly_reminder(title="DO EXPENSE REPORT",
-                                     day_of_month=1,
-                                     checklist=["co-working space", "travel stuff", "other expenses"])
-        self.create_monthly_reminder(title="Maintenance",
-                                     day_of_month=10,
-                                     checklist=["NAS", "DNS", "versions infrastructure repo"])
-
-    def create_monthly_reminder(self, title: str, day_of_month: int, checklist: list[str]) -> None:
-        tomorrow: datetime = datetime.today() + timedelta(days=1)
-        if tomorrow.day == day_of_month:
-            print(f"Creating {title} monthly reminder")
-            expense_reminder: Card = self.work_list.add_card(title)
-            expense_reminder.set_pos(0)
-            expense_reminder.add_checklist("TODO", checklist)
-            expense_reminder.add_label(self.orga_label)
-
-    def create_daily_todo(self) -> None:
-        tomorrow: datetime = datetime.today() + timedelta(days=1)
-        # skip the creation of this task on the weekends
-        if tomorrow.weekday() in (5, 6):
-            print("It's a weekend, no need for a todo card")
-            return
-        print(f"Creating todo card for: DAILYS {tomorrow.strftime('%a')}")
-        new_todos: Card = self.work_list.add_card(f"DAILYS {tomorrow.strftime('%a')}")
-        new_todos.set_pos(0)
-        checklist = [
+        daily_checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
             "plan day",
             "0.5 h tech training",
@@ -208,9 +182,40 @@ class DailyWorkTodos(TrelloManager):
             "Github board https://github.com/orgs/grafana/projects/146",
             "read PR's https://github.com/pulls/review-requested"
         ]
-        new_todos.add_checklist("TODO", checklist)
-        new_todos.add_label(self.orga_label)
+        tomorrow: datetime = datetime.today() + timedelta(days=1)
+        self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
+                                       checklist=daily_checklist,
+                                       days_of_week=[0, 1, 2, 3, 4])
+        self.create_scheduled_reminder(title="DO EXPENSE REPORT",
+                                       checklist=["co-working space", "travel stuff", "other expenses"],
+                                       days_of_month=[1])
+        self.create_scheduled_reminder(title="Maintenance",
+                                       checklist=["NAS", "DNS", "versions infrastructure repo"],
+                                       days_of_month=[10])
+
+    def create_scheduled_reminder(self, title: str, checklist: list[str],
+                                  days_of_month: Optional[list[int]] = None,
+                                  days_of_week: Optional[list[int]] = None) -> None:
+        tomorrow: datetime = datetime.today() + timedelta(days=1)
+        # check of weekly occurence
+        if days_of_week:
+            if tomorrow.weekday() in days_of_week:
+                self.create_todo(title, checklist)
+                return
+
+        # check for monthly occurence
+        if days_of_month:
+            if tomorrow.day in days_of_month:
+                self.create_todo(title, checklist)
+
+    def create_todo(self, title: str, checklist: Optional[list[str]]) -> None:
+        print(f"Creating {title} reminder")
+        todo_card: Card = self.work_list.add_card(title)
+        todo_card.set_pos(0)
+        if checklist:
+            todo_card.add_checklist("Checklist", checklist)
+        todo_card.add_label(self.orga_label)
 
 
 if __name__ == "__main__":  # pragma: no cover
-    DailyWorkTodos().run()
+    SheduledTodos().run()
