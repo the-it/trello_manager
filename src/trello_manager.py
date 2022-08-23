@@ -192,6 +192,19 @@ class SheduledTodos(TrelloManager):
         self.create_scheduled_reminder(title="Maintenance",
                                        checklist=["NAS", "DNS", "versions infrastructure repo"],
                                        days_of_month=[10])
+        clean_checklist = [
+            "Bad basics",
+            "saugen",
+            "Sofa saugen",
+            "Scheuerleisten",
+            "Bett neu beziehen",
+            "Dusche",
+            "Wischen",
+            "kleines Klo spülen",
+        ]
+        self.create_scheduled_reminder(title="Putzen",
+                                       checklist=clean_checklist,
+                                       days_of_week=[3])
 
     def create_scheduled_reminder(self, title: str, checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
