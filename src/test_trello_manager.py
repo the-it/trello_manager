@@ -8,7 +8,7 @@ from freezegun import freeze_time
 from testfixtures import compare
 from trello import TrelloClient
 
-from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask, DailyWorkTodos
+from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask, SheduledTodos
 
 TEST_BOARD = "UNITTEST"
 TEST_KEY = "TRELLO_API_KEY_TEST"
@@ -220,39 +220,43 @@ class TestReplayDateTask(TrelloTest):
 
 
 class TestDailyWorkTodos(TrelloTest):
-    DailyWorkTodos._board_name = TEST_BOARD
-    DailyWorkTodos._key = TEST_KEY
-    DailyWorkTodos._secret = TEST_SECRET
+    SheduledTodos._board_name = TEST_BOARD
+    SheduledTodos._key = TEST_KEY
+    SheduledTodos._secret = TEST_SECRET
 
     def setUp(self):
         super().setUp()
         self.list_todo = self.board.add_list("ToDo")
         self.orga_label = self.board.add_label("Orga", "pink")
-        self.task = DailyWorkTodos()
+        self.task = SheduledTodos()
 
     @freeze_time("2021-08-12")
     def test_create_daily_todos(self):
-        self.task.create_daily_todo()
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            days_of_week=[4])
 
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
-        compare("DAILYS Fri", todo_cards[0].name)
-        compare(8, len(todo_cards[0].checklists[0].items))
+        compare("Test", todo_cards[0].name)
+        compare(2, len(todo_cards[0].checklists[0].items))
         compare(self.orga_label, todo_cards[0].labels[0])
 
     @freeze_time("2021-08-13")
     def test_no_todos_on_the_weekend(self):
-        self.task.create_daily_todo()
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            days_of_week=[4])
 
         todo_cards = self.list_todo.list_cards()
-        # no cards for the weekend
+        # only cards on friday
         compare(0, len(todo_cards))
 
     @freeze_time("2021-01-31")
     def test_monthly_reminder(self):
-        self.task.create_monthly_reminder(title="Test",
-                                          day_of_month=1,
-                                          checklist=["1", "2"])
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            days_of_month=[1])
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
         compare("Test", todo_cards[0].name)
@@ -261,8 +265,20 @@ class TestDailyWorkTodos(TrelloTest):
 
     @freeze_time("2021-01-3")
     def test_monthly_reminder_only_on_the_first_of_month(self):
-        self.task.create_monthly_reminder(title="Test",
-                                          day_of_month=1,
-                                          checklist=["1", "2"])
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            days_of_month=[1])
         todo_cards = self.list_todo.list_cards()
         compare(0, len(todo_cards))
+
+    @freeze_time("2021-08-12")
+    def test_two_criteria(self):
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            days_of_week=[5],
+                                            days_of_month=[13])
+
+        todo_cards = self.list_todo.list_cards()
+        # if two days match only one card to create
+        compare(1, len(todo_cards))
+        compare(self.orga_label, todo_cards[0].labels[0])
