@@ -201,6 +201,8 @@ class SheduledTodos(TrelloManager):
             "Dusche",
             "Wischen",
             "kleines Klo spülen",
+            "Seifenschalte putzen",
+            "Spiegel",
         ]
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
