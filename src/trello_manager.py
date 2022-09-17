@@ -203,10 +203,12 @@ class SheduledTodos(TrelloManager):
             "kleines Klo spülen",
             "Seifenschalte putzen",
             "Spiegel",
+            "Staub wishen",
+            "Flaschen wegbringen"
         ]
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
-                                       days_of_week=[3])
+                                       days_of_week=[1])
 
     def create_scheduled_reminder(self, title: str, checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
