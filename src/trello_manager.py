@@ -180,7 +180,8 @@ class SheduledTodos(TrelloManager):
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",
             "Github board https://github.com/orgs/grafana/projects/146",
-            "read PR's https://github.com/pulls/review-requested"
+            "read PR's https://github.com/pulls/review-requested",
+            "Board https://github.com/orgs/grafana/projects/146"
         ]
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
@@ -207,6 +208,7 @@ class SheduledTodos(TrelloManager):
             "Flaschen wegbringen",
             "Rasen mähen",
             "EbayK",
+            "Küche putzen",
         ]
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
