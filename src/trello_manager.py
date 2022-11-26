@@ -187,12 +187,6 @@ class SheduledTodos(TrelloManager):
         self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
                                        checklist=daily_checklist,
                                        days_of_week=[0, 1, 2, 3, 4])
-        self.create_scheduled_reminder(title="DO EXPENSE REPORT",
-                                       checklist=["co-working space", "travel stuff", "other expenses"],
-                                       days_of_month=[1])
-        self.create_scheduled_reminder(title="Maintenance",
-                                       checklist=["NAS", "DNS", "versions infrastructure repo"],
-                                       days_of_month=[10])
         clean_checklist = [
             "Bad basics",
             "saugen",
@@ -213,6 +207,15 @@ class SheduledTodos(TrelloManager):
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
                                        days_of_week=[1])
+        self.create_scheduled_reminder(title="DO EXPENSE REPORT",
+                                       checklist=["co-working space", "travel stuff", "other expenses"],
+                                       days_of_month=[1])
+        self.create_scheduled_reminder(title="Maintenance",
+                                       checklist=["NAS", "DNS", "versions infrastructure repo"],
+                                       days_of_month=[10])
+        self.create_scheduled_reminder(title="Putzen monatlich",
+                                       checklist=["Waschmaschine putzen"],
+                                       days_of_month=[1])
 
     def create_scheduled_reminder(self, title: str, checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
