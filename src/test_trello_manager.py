@@ -234,7 +234,7 @@ class TestDailyWorkTodos(TrelloTest):
     def test_create_daily_todos(self):
         self.task.create_scheduled_reminder(title="Test",
                                             checklist=["1", "2"],
-                                            days_of_week=[3])
+                                            days_of_week=[5])
 
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
