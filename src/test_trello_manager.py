@@ -230,11 +230,11 @@ class TestDailyWorkTodos(TrelloTest):
         self.orga_label = self.board.add_label("Orga", "pink")
         self.task = SheduledTodos()
 
-    @freeze_time("2021-08-12")
+    @freeze_time("2022-08-12")
     def test_create_daily_todos(self):
         self.task.create_scheduled_reminder(title="Test",
                                             checklist=["1", "2"],
-                                            days_of_week=[4])
+                                            days_of_week=[3])
 
         todo_cards = self.list_todo.list_cards()
         compare(1, len(todo_cards))
@@ -242,17 +242,17 @@ class TestDailyWorkTodos(TrelloTest):
         compare(2, len(todo_cards[0].checklists[0].items))
         compare(self.orga_label, todo_cards[0].labels[0])
 
-    @freeze_time("2021-08-13")
+    @freeze_time("2022-08-13")
     def test_no_todos_on_the_weekend(self):
         self.task.create_scheduled_reminder(title="Test",
                                             checklist=["1", "2"],
-                                            days_of_week=[4])
+                                            days_of_week=[3])
 
         todo_cards = self.list_todo.list_cards()
         # only cards on friday
         compare(0, len(todo_cards))
 
-    @freeze_time("2021-01-31")
+    @freeze_time("2022-01-31")
     def test_monthly_reminder(self):
         self.task.create_scheduled_reminder(title="Test",
                                             checklist=["1", "2"],
@@ -263,7 +263,7 @@ class TestDailyWorkTodos(TrelloTest):
         compare(2, len(todo_cards[0].checklists[0].items))
         compare(self.orga_label, todo_cards[0].labels[0])
 
-    @freeze_time("2021-01-3")
+    @freeze_time("2022-01-3")
     def test_monthly_reminder_only_on_the_first_of_month(self):
         self.task.create_scheduled_reminder(title="Test",
                                             checklist=["1", "2"],
@@ -271,11 +271,11 @@ class TestDailyWorkTodos(TrelloTest):
         todo_cards = self.list_todo.list_cards()
         compare(0, len(todo_cards))
 
-    @freeze_time("2021-08-12")
+    @freeze_time("2022-08-12")
     def test_two_criteria(self):
         self.task.create_scheduled_reminder(title="Test",
                                             checklist=["1", "2"],
-                                            days_of_week=[5],
+                                            days_of_week=[4],
                                             days_of_month=[13])
 
         todo_cards = self.list_todo.list_cards()
