@@ -6,7 +6,7 @@
 #
 astroid==2.12.13
     # via pylint
-certifi==2022.9.24
+certifi==2022.12.7
     # via requests
 charset-normalizer==2.1.1
     # via requests
@@ -66,8 +66,6 @@ requests==2.28.1
     #   safety
 ruamel-yaml==0.17.21
     # via safety
-ruamel-yaml-clib==0.2.7
-    # via ruamel-yaml
 safety==2.3.2
     # via -r requirements-dev.in
 six==1.16.0
@@ -76,17 +74,10 @@ testfixtures==7.0.3
     # via -r requirements-dev.in
 toml==0.10.2
     # via dparse
-tomli==2.0.1
-    # via
-    #   mypy
-    #   pylint
 tomlkit==0.11.6
     # via pylint
 typing-extensions==4.4.0
-    # via
-    #   astroid
-    #   mypy
-    #   pylint
+    # via mypy
 urllib3==1.26.13
     # via requests
 wrapt==1.14.1
