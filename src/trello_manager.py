@@ -181,7 +181,8 @@ class SheduledTodos(TrelloManager):
             "Slack https://raintank-corp.slack.com/",
             "Github board https://github.com/orgs/grafana/projects/146",
             "read PR's https://github.com/pulls/review-requested",
-            "Board https://github.com/orgs/grafana/projects/146"
+            "Board https://github.com/orgs/grafana/projects/146",
+            "0.5h priv Tech/WS"
         ]
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
