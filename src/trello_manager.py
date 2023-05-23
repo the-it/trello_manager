@@ -217,10 +217,14 @@ class SheduledTodos(TrelloManager):
         self.create_scheduled_reminder(title="Putzen monatlich",
                                        checklist=["Waschmaschine putzen", "Spúlmaschine putzen"],
                                        days_of_month=[1])
+        self.create_scheduled_reminder(title="Über Freibeträge Gedanken",
+                                       checklist=["Depot", "DKB"],
+                                       days_of_year=[300])
 
     def create_scheduled_reminder(self, title: str, checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
-                                  days_of_week: Optional[list[int]] = None) -> None:
+                                  days_of_week: Optional[list[int]] = None,
+                                  months_of_year: Optional[list[int]] = None) -> None:
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         # check of weekly occurence
         if days_of_week:
@@ -228,10 +232,19 @@ class SheduledTodos(TrelloManager):
                 self.create_todo(title, checklist)
                 return
 
-        # check for monthly occurence
+
         if days_of_month:
-            if tomorrow.day in days_of_month:
-                self.create_todo(title, checklist)
+            if months_of_year:
+                # check for yearly occurences
+                if tomorrow.month in months_of_year:
+                    if tomorrow.day in days_of_month:
+                        self.create_todo(title, checklist)
+                        return
+            else:
+                # check for monthly occurence
+                if tomorrow.day in days_of_month:
+                    self.create_todo(title, checklist)
+                    return
 
     def create_todo(self, title: str, checklist: Optional[list[str]]) -> None:
         print(f"Creating {title} reminder")

@@ -263,6 +263,27 @@ class TestDailyWorkTodos(TrelloTest):
         compare(2, len(todo_cards[0].checklists[0].items))
         compare(self.orga_label, todo_cards[0].labels[0])
 
+    @freeze_time("2022-02-28")
+    def test_yearly_reminder(self):
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            months_of_year=[3],
+                                            days_of_month=[1])
+        todo_cards = self.list_todo.list_cards()
+        compare(1, len(todo_cards))
+        compare("Test", todo_cards[0].name)
+        compare(2, len(todo_cards[0].checklists[0].items))
+        compare(self.orga_label, todo_cards[0].labels[0])
+
+    @freeze_time("2022-02-28")
+    def test_yearly_reminder_only_correct_month(self):
+        self.task.create_scheduled_reminder(title="Test",
+                                            checklist=["1", "2"],
+                                            months_of_year=[4],
+                                            days_of_month=[1])
+        todo_cards = self.list_todo.list_cards()
+        compare(0, len(todo_cards))
+
     @freeze_time("2022-01-3")
     def test_monthly_reminder_only_on_the_first_of_month(self):
         self.task.create_scheduled_reminder(title="Test",
