@@ -224,7 +224,7 @@ class SheduledTodos(TrelloManager):
 
     def create_scheduled_reminder(self, title: str, checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
-                                  days_of_week: Optional[list[int]] = None,
+                                  days_of_week: Optional[list[int]] = None,  # 0-6
                                   months_of_year: Optional[list[int]] = None) -> None:
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         # check of weekly occurence
