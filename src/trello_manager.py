@@ -219,7 +219,8 @@ class SheduledTodos(TrelloManager):
                                        days_of_month=[1])
         self.create_scheduled_reminder(title="Über Freibeträge Gedanken",
                                        checklist=["Depot", "DKB"],
-                                       days_of_year=[300])
+                                       days_of_month=[1],
+                                       months_of_year=[11])
 
     def create_scheduled_reminder(self, title: str, checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
@@ -231,7 +232,6 @@ class SheduledTodos(TrelloManager):
             if tomorrow.weekday() in days_of_week:
                 self.create_todo(title, checklist)
                 return
-
 
         if days_of_month:
             if months_of_year:
