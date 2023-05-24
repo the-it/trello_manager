@@ -4,7 +4,7 @@ clean-pyc :
 
 update_pip_tool :
 	echo "########## UPDATE PIP ##########"
-	pip3 install --upgrade pip setuptools
+	pip3 install --upgrade pip pip-tools setuptools wheel
 
 pip3 : update_pip_tool
 	echo "##### INSTALL REQUIREMENTS #####"
@@ -16,8 +16,6 @@ pip3-dev : update_pip_tool
 
 update_pip3 : update_pip_tool
 	echo "##### UPDATE REQUIREMENTS ######"
-	pip install pip-tools -U
-	pip install wheel -U
 	rm requirements.txt requirements-dev.txt || true
 	pip-compile --output-file requirements.txt requirements.in
 	pip-compile --output-file requirements-dev.txt requirements-dev.in
