@@ -4,7 +4,7 @@ clean-pyc :
 
 update_pip_tool :
 	echo "########## UPDATE PIP ##########"
-	pip3 install --upgrade pip
+	pip3 install --upgrade pip setuptools
 
 pip3 : update_pip_tool
 	echo "##### INSTALL REQUIREMENTS #####"
