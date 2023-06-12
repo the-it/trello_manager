@@ -204,6 +204,7 @@ class SheduledTodos(TrelloManager):
             "Rasen mähen",
             "EbayK",
             "Küche putzen",
+            "Müllbeutel wegbringen"
         ]
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
