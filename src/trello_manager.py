@@ -158,7 +158,7 @@ class ReplayDateTask(TrelloManager):
                 card.change_list(self.todo_list.id)
 
 
-class SheduledTodos(TrelloManager):
+class ScheduledTodos(TrelloManager):
     _board_name = "Tasks"
 
     def __init__(self):
@@ -257,4 +257,4 @@ class SheduledTodos(TrelloManager):
 
 
 if __name__ == "__main__":  # pragma: no cover
-    SheduledTodos().run()
+    ScheduledTodos().run()

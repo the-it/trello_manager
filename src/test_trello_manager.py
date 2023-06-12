@@ -8,7 +8,7 @@ from freezegun import freeze_time
 from testfixtures import compare
 from trello import TrelloClient
 
-from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask, SheduledTodos
+from src.trello_manager import TrelloManager, TrelloExecption, ShoppingTask, ReplayDateTask, ScheduledTodos
 
 TEST_BOARD = "UNITTEST"
 TEST_KEY = "TRELLO_API_KEY_TEST"
@@ -220,15 +220,15 @@ class TestReplayDateTask(TrelloTest):
 
 
 class TestDailyWorkTodos(TrelloTest):
-    SheduledTodos._board_name = TEST_BOARD
-    SheduledTodos._key = TEST_KEY
-    SheduledTodos._secret = TEST_SECRET
+    ScheduledTodos._board_name = TEST_BOARD
+    ScheduledTodos._key = TEST_KEY
+    ScheduledTodos._secret = TEST_SECRET
 
     def setUp(self):
         super().setUp()
         self.list_todo = self.board.add_list("ToDo")
         self.orga_label = self.board.add_label("Orga", "pink")
-        self.task = SheduledTodos()
+        self.task = ScheduledTodos()
 
     @freeze_time("2022-08-12")
     def test_create_daily_todos(self):
