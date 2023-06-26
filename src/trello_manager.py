@@ -217,7 +217,7 @@ class ScheduledTodos(TrelloManager):
                                        checklist=["NAS", "DNS", "media", "versions infrastructure repo"],
                                        days_of_month=[10])
         self.create_scheduled_reminder(title="Putzen monatlich",
-                                       checklist=["Waschmaschine putzen", "Spúlmaschine putzen"],
+                                       checklist=["Waschmaschine putzen", "Spúlmaschine putzen", "Dunstabzugshaube"],
                                        days_of_month=[1])
         self.create_scheduled_reminder(title="Über Freibeträge Gedanken",
                                        checklist=["Depot", "DKB"],
