@@ -175,7 +175,7 @@ class ScheduledTodos(TrelloManager):
         daily_checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
             "plan day",
-            "0.5 h tech training",
+            "write down worktime",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",
