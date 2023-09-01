@@ -181,7 +181,7 @@ class ScheduledTodos(TrelloManager):
             "Slack https://raintank-corp.slack.com/",
             "Github board https://github.com/orgs/grafana/projects/146",
             "read PR's https://github.com/pulls/review-requested",
-            "Board https://github.com/orgs/grafana/projects/146",
+            "Safed Slack Items",
             "0.5h priv Tech/WS"
         ]
         tomorrow: datetime = datetime.today() + timedelta(days=1)
