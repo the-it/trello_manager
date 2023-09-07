@@ -179,7 +179,7 @@ class ScheduledTodos(TrelloManager):
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "Slack https://raintank-corp.slack.com/",
-            "Github board https://github.com/orgs/grafana/projects/146",
+            "Roadmap https://docs.google.com/document/d/1E-kHsPplK4-5W5CgY_CtUK1jO-KNLnU-GBk9IxPX_94",
             "read PR's https://github.com/pulls/review-requested",
             "Safed Slack Items",
             "0.5h priv Tech/WS"
