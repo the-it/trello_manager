@@ -174,6 +174,7 @@ class ScheduledTodos(TrelloManager):
     def run(self):
         daily_checklist = [
             "calendar https://calendar.google.com/calendar/u/0/r",
+            "Board https://github.com/orgs/grafana/projects/146",
             "plan day",
             "write down worktime",
             "15-five update https://grafana.15five.com/profile/highlights/",
