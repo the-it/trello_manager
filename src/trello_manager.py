@@ -214,8 +214,15 @@ class ScheduledTodos(TrelloManager):
         self.create_scheduled_reminder(title="DO EXPENSE REPORT",
                                        checklist=["co-working space", "travel stuff", "other expenses"],
                                        days_of_month=[1])
+        maintenance_checklist = [
+            "NAS",
+            "DNS",
+            "media",
+            "versions infrastructure repo",
+            "Handy Photos leeren",
+        ]
         self.create_scheduled_reminder(title="Maintenance",
-                                       checklist=["NAS", "DNS", "media", "versions infrastructure repo", "Handy Photos leeren"],
+                                       checklist=maintenance_checklist,
                                        days_of_month=[10])
         self.create_scheduled_reminder(title="Putzen monatlich",
                                        checklist=["Waschmaschine putzen", "Spúlmaschine putzen", "Dunstabzugshaube"],
