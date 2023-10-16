@@ -207,7 +207,8 @@ class ScheduledTodos(TrelloManager):
             "EbayK",
             "Küche putzen",
             "Müllbeutel wegbringen",
-            "Flaschen reinigen"
+            "Flaschen reinigen",
+            "Lichtschalter",
         ]
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
