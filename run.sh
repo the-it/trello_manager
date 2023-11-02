@@ -40,8 +40,6 @@ function get_version() {
 function build() {
     VERSION=`get_version`
 
-    python3 -m site --user-site
-
     # Cleanup temp folders
     rm -rf ${WORK_DIR}
     mkdir -p ${ZIP_FOLDER}
