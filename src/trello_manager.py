@@ -208,7 +208,8 @@ class ScheduledTodos(TrelloManager):
             "Küche putzen",
             "Müllbeutel wegbringen",
             "Flaschen reinigen",
-            "Lichtschalter",
+            "Lichtschalter + schmale Kanten",
+            "Kissen aufschütteln",
         ]
         self.create_scheduled_reminder(title="Putzen",
                                        checklist=clean_checklist,
