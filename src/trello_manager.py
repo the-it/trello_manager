@@ -177,6 +177,7 @@ class ScheduledTodos(TrelloManager):
             "Board https://github.com/orgs/grafana/projects/146",
             "plan day",
             "0,5h Garten",
+            "Saft machen, Orangen holen",
             "write down worktime",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
