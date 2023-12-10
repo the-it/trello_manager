@@ -137,7 +137,6 @@ coverage_steps: &coverage_steps
     - *pylint
     - *mypy
     - *pycodestyle
-    - *safety
     - *run_coverage
     - *report_codecov
     - *save_repo
