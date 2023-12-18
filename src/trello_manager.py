@@ -173,6 +173,7 @@ class ScheduledTodos(TrelloManager):
 
     def run(self):
         daily_checklist = [
+            "Gesicht waschen, Selbstpflege, Deo"
             "calendar https://calendar.google.com/calendar/u/0/r",
             "Board https://github.com/orgs/grafana/projects/146",
             "plan day",
@@ -181,8 +182,6 @@ class ScheduledTodos(TrelloManager):
             "write down worktime",
             "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
-            "Slack https://raintank-corp.slack.com/",
-            "Roadmap https://docs.google.com/document/d/1E-kHsPplK4-5W5CgY_CtUK1jO-KNLnU-GBk9IxPX_94",
             "read PR's https://github.com/pulls/review-requested",
             "Safed Slack Items",
             "0.5h priv Tech/WS"
@@ -225,6 +224,8 @@ class ScheduledTodos(TrelloManager):
             "media",
             "versions infrastructure repo",
             "Handy Photos leeren",
+            "Trello Manager",
+            "WS Bot",
         ]
         self.create_scheduled_reminder(title="Maintenance",
                                        checklist=maintenance_checklist,
