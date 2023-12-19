@@ -173,7 +173,7 @@ class ScheduledTodos(TrelloManager):
 
     def run(self):
         daily_checklist = [
-            "Gesicht waschen, Selbstpflege, Deo"
+            "Gesicht waschen, Selbstpflege, Deo",
             "calendar https://calendar.google.com/calendar/u/0/r",
             "Board https://github.com/orgs/grafana/projects/146",
             "plan day",
