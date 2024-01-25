@@ -44,8 +44,7 @@ class ShoppingTask(TrelloManager):
 
     label: dict[str, str] = {"Drogerie": "Drogerie",
                              "Lebensmittel": "Lebensmittel",
-                             "Getränke": "Lebensmittel",
-                             "Sonstiges": "Sonstiges"}
+                             "Getränke": "Lebensmittel"}
 
     def __init__(self):
         super().__init__()
