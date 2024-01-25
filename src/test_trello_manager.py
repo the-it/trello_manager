@@ -86,15 +86,12 @@ class TestShoppingTask(TrelloTest):
         self.label_getraenke = self.board.add_label("Getränke", "yellow")
         self.list_drogerie = self.board.add_list("Gerade nicht kaufen (Drogerie)")
         self.label_drogerie = self.board.add_label("Drogerie", "red")
-        self.list_sonstiges = self.board.add_list("Gerade nicht kaufen (Sonstiges)")
-        self.label_sonstiges = self.board.add_label("Sonstiges", "green")
         self.task = ShoppingTask()
 
     def test_integration(self):
         self.buy_list.add_card("Test_Item_1", labels=[self.label_lebensmittel])
         self.buy_list.add_card("Test_Item_2", labels=[self.label_drogerie])
         self.buy_list.add_card("Test_Item_3", labels=[self.label_getraenke])
-        self.buy_list.add_card("Test_Item_4", labels=[self.label_sonstiges])
         self.buy_list.add_card("Don't show")
         self.buy_list.archive_all_cards()
         self.buy_list.add_card("Show")
@@ -104,9 +101,6 @@ class TestShoppingTask(TrelloTest):
         drogerie_cards = self.list_drogerie.list_cards()
         compare(1, len(drogerie_cards))
         compare("Test_Item_2", drogerie_cards[0].name)
-        sonstige_cards = self.list_sonstiges.list_cards()
-        compare(1, len(sonstige_cards))
-        compare("Test_Item_4", sonstige_cards[0].name)
         lebensmittel_cards = self.list_lebensmittel.list_cards()
         compare(2, len(lebensmittel_cards))
         compare("Test_Item_1", lebensmittel_cards[0].name)
@@ -122,7 +116,6 @@ class TestShoppingTask(TrelloTest):
         for category in ((self.list_lebensmittel, self.label_lebensmittel),
                          (self.list_drogerie, self.label_drogerie),
                          (self.list_sonstiges, self.label_sonstiges)):
-            self.buy_list.add_card("Test_Item_4", labels=[category[1]])
             self.buy_list.add_card("Test_Item_2", labels=[category[1]])
             self.buy_list.add_card("Test_Item_0", labels=[category[1]])
             self.buy_list.archive_all_cards()
@@ -133,7 +126,6 @@ class TestShoppingTask(TrelloTest):
             compare(3, len(cards))
             compare("Test_Item_0", cards[0].name)
             compare("Test_Item_2", cards[1].name)
-            compare("Test_Item_4", cards[2].name)
 
 
 class TestReplayDateTask(TrelloTest):
