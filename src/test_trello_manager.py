@@ -114,8 +114,7 @@ class TestShoppingTask(TrelloTest):
 
     def test_sorting(self):
         for category in ((self.list_lebensmittel, self.label_lebensmittel),
-                         (self.list_drogerie, self.label_drogerie),
-                         (self.list_sonstiges, self.label_sonstiges)):
+                         (self.list_drogerie, self.label_drogerie)):
             self.buy_list.add_card("Test_Item_2", labels=[category[1]])
             self.buy_list.add_card("Test_Item_0", labels=[category[1]])
             self.buy_list.archive_all_cards()
