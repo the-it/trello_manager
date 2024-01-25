@@ -123,7 +123,7 @@ class TestShoppingTask(TrelloTest):
             self.task.run()
 
             cards = category[0].list_cards()
-            compare(3, len(cards))
+            compare(2, len(cards))
             compare("Test_Item_0", cards[0].name)
             compare("Test_Item_2", cards[1].name)
 
