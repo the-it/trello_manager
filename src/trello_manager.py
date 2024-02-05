@@ -158,8 +158,6 @@ class ReplayDateTask(TrelloManager):
 
 
 class ScheduledTodos(TrelloManager):
-    _board_name = "Tasks"
-
     def __init__(self):
         super().__init__()
         self.orga_label: Label = None
@@ -168,76 +166,10 @@ class ScheduledTodos(TrelloManager):
                 self.orga_label = label
             if self.orga_label:
                 break
-        self.work_list: List = self.get_list_by_name("ToDo")
+        self.todo_list: List = self.get_list_by_name("ToDo")
 
-    def run(self):
-        daily_checklist = [
-            "Gesicht waschen, Selbstpflege, Deo",
-            "calendar https://calendar.google.com/calendar/u/0/r",
-            "Board https://github.com/orgs/grafana/projects/146",
-            "plan day",
-            "0,5h Garten",
-            "Saft machen, Orangen holen",
-            "write down worktime",
-            "15-five update https://grafana.15five.com/profile/highlights/",
-            "Mails https://mail.google.com/mail/u/0/#inbox",
-            "read PR's https://github.com/pulls/review-requested",
-            "Safed Slack Items",
-            "0.5h priv Tech/WS"
-        ]
-        tomorrow: datetime = datetime.today() + timedelta(days=1)
-        self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
-                                       checklist=daily_checklist,
-                                       days_of_week=[0, 1, 2, 3, 4])
-        clean_checklist = [
-            "Bad basics",
-            "saugen",
-            "Sofa saugen",
-            "Scheuerleisten",
-            "Bett neu beziehen",
-            "Dusche",
-            "Wischen",
-            "kleines Klo spülen",
-            "Seifenschale putzen",
-            "Spiegel",
-            "Staub wischen",
-            "Flaschen wegbringen",
-            "Rasen mähen",
-            "EbayK",
-            "Küche putzen",
-            "Müllbeutel wegbringen",
-            "Flaschen reinigen",
-            "Lichtschalter + schmale Kanten",
-            "Kissen aufschütteln",
-            "Handtuchhalter entstauben",
-        ]
-        self.create_scheduled_reminder(title="Putzen",
-                                       checklist=clean_checklist,
-                                       days_of_week=[1])
-        self.create_scheduled_reminder(title="DO EXPENSE REPORT",
-                                       checklist=["co-working space", "travel stuff", "other expenses"],
-                                       days_of_month=[1])
-        maintenance_checklist = [
-            "NAS",
-            "DNS",
-            "media",
-            "versions infrastructure repo",
-            "Handy Photos leeren",
-            "Trello Manager",
-            "WS Bot",
-        ]
-        self.create_scheduled_reminder(title="Maintenance",
-                                       checklist=maintenance_checklist,
-                                       days_of_month=[10])
-        self.create_scheduled_reminder(title="Putzen monatlich",
-                                       checklist=["Waschmaschine putzen", "Spúlmaschine putzen", "Dunstabzugshaube"],
-                                       days_of_month=[1])
-        self.create_scheduled_reminder(title="Über Freibeträge Gedanken",
-                                       checklist=["Depot", "DKB"],
-                                       days_of_month=[1],
-                                       months_of_year=[11])
-
-    def create_scheduled_reminder(self, title: str, checklist: list[str],
+    def create_scheduled_reminder(self, title: str,
+                                  checklist: list[str],
                                   days_of_month: Optional[list[int]] = None,
                                   days_of_week: Optional[list[int]] = None,  # 0-6
                                   months_of_year: Optional[list[int]] = None) -> None:
@@ -263,12 +195,89 @@ class ScheduledTodos(TrelloManager):
 
     def create_todo(self, title: str, checklist: Optional[list[str]]) -> None:
         print(f"Creating {title} reminder")
-        todo_card: Card = self.work_list.add_card(title)
+        todo_card: Card = self.todo_list.add_card(title)
         todo_card.set_pos(0)
         if checklist:
             todo_card.add_checklist("Checklist", checklist)
         todo_card.add_label(self.orga_label)
 
 
+class PrivateTodos(ScheduledTodos):
+    _board_name = "Tasks"
+
+    def run(self):
+        clean_checklist = [
+            "Bad basics",
+            "saugen",
+            "Sofa saugen",
+            "Scheuerleisten",
+            "Bett neu beziehen",
+            "Dusche",
+            "Wischen",
+            "kleines Klo spülen",
+            "Seifenschale putzen",
+            "Spiegel",
+            "Staub wischen",
+            "Flaschen wegbringen",
+            "Rasen mähen",
+            "EbayK",
+            "Küche putzen",
+            "Müllbeutel wegbringen",
+            "Flaschen reinigen",
+            "Lichtschalter + schmale Kanten",
+            "Kissen aufschütteln",
+            "Handtuchhalter entstauben",
+        ]
+        self.create_scheduled_reminder(title="Putzen",
+                                       checklist=clean_checklist,
+                                       days_of_week=[1])
+        maintenance_checklist = [
+            "NAS",
+            "DNS",
+            "media",
+            "versions infrastructure repo",
+            "Handy Photos leeren",
+            "Trello Manager",
+            "WS Bot",
+        ]
+        self.create_scheduled_reminder(title="Maintenance",
+                                       checklist=maintenance_checklist,
+                                       days_of_month=[10])
+        self.create_scheduled_reminder(title="Putzen monatlich",
+                                       checklist=["Waschmaschine putzen", "Spúlmaschine putzen", "Dunstabzugshaube"],
+                                       days_of_month=[1])
+        self.create_scheduled_reminder(title="Über Freibeträge Gedanken",
+                                       checklist=["Depot", "DKB"],
+                                       days_of_month=[1],
+                                       months_of_year=[11])
+
+
+class WorkTodos(ScheduledTodos):
+    _board_name = "Work"
+
+    def run(self):
+        daily_checklist = [
+            "Gesicht waschen, Selbstpflege, Deo",
+            "calendar https://calendar.google.com/calendar/u/0/r",
+            "Board https://github.com/orgs/grafana/projects/146",
+            "plan day",
+            "0,5h Garten",
+            "Saft machen, Orangen holen",
+            "write down worktime",
+            "15-five update https://grafana.15five.com/profile/highlights/",
+            "Mails https://mail.google.com/mail/u/0/#inbox",
+            "read PR's https://github.com/pulls/review-requested",
+            "Safed Slack Items",
+            "0.5h priv Tech/WS"
+        ]
+        tomorrow: datetime = datetime.today() + timedelta(days=1)
+        self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
+                                       checklist=daily_checklist,
+                                       days_of_week=[0, 1, 2, 3, 4])
+        self.create_scheduled_reminder(title="DO EXPENSE REPORT",
+                                       checklist=["co-working space", "travel stuff", "other expenses"],
+                                       days_of_month=[1])
+
+
 if __name__ == "__main__":  # pragma: no cover
-    ScheduledTodos().run()
+    WorkTodos().run()
