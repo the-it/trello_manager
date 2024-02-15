@@ -251,7 +251,7 @@ class TestDailyWorkTodos(TrelloTest):
         compare(0, len(todo_cards))
 
     def test_monthly_reminder(self):
-        #last_day of January
+        # last_day of January
         with freeze_time(datetime(datetime.now().year, 1, 31).strftime("%Y-%m-%d")):
             self.task.create_scheduled_reminder(title="Test",
                                                 checklist=["1", "2"],
