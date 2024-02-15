@@ -243,6 +243,17 @@ class PrivateTodos(ScheduledTodos):
         self.create_scheduled_reminder(title="Maintenance",
                                        checklist=maintenance_checklist,
                                        days_of_month=[10])
+        daily_checklist = [
+            "Gesicht waschen, Selbstpflege, Deo",
+            "0,5h Garten",
+            "Saft machen, Orangen holen",
+            "0.5h priv Tech/WS",
+            "Französisch lernen"
+        ]
+        tomorrow: datetime = datetime.today() + timedelta(days=1)
+        self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
+                                       checklist=daily_checklist,
+                                       days_of_week=[0, 1, 2, 3, 4, 5, 6])
         self.create_scheduled_reminder(title="Putzen monatlich",
                                        checklist=["Waschmaschine putzen", "Spúlmaschine putzen", "Dunstabzugshaube"],
                                        days_of_month=[1])
@@ -257,18 +268,13 @@ class WorkTodos(ScheduledTodos):
 
     def run(self):
         daily_checklist = [
-            "Gesicht waschen, Selbstpflege, Deo",
             "calendar https://calendar.google.com/calendar/u/0/r",
             "Board https://github.com/orgs/grafana/projects/146",
             "plan day",
-            "0,5h Garten",
-            "Saft machen, Orangen holen",
             "write down worktime",
-            "15-five update https://grafana.15five.com/profile/highlights/",
             "Mails https://mail.google.com/mail/u/0/#inbox",
             "read PR's https://github.com/pulls/review-requested",
             "Safed Slack Items",
-            "0.5h priv Tech/WS"
         ]
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
