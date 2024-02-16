@@ -227,8 +227,8 @@ class TestDailyWorkTodos(TrelloTest):
         self.task = ScheduledTodos()
 
     def test_create_daily_todos(self):
-        # Saturday
-        with freeze_time(self.first_weekday_of_the_year(5)):
+        # tomorrow is Saturday
+        with freeze_time(self.first_weekday_of_the_year(4)):
             self.task.create_scheduled_reminder(title="Test",
                                                 checklist=["1", "2"],
                                                 days_of_week=[5])
@@ -292,7 +292,8 @@ class TestDailyWorkTodos(TrelloTest):
             compare(0, len(todo_cards))
 
     def test_two_criteria(self):
-        with freeze_time(self.first_weekday_of_the_year(5)):
+        # tomorrow is Saturday
+        with freeze_time(self.first_weekday_of_the_year(4)):
             self.task.create_scheduled_reminder(title="Test",
                                                 checklist=["1", "2"],
                                                 days_of_week=[5],
