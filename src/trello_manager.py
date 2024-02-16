@@ -248,14 +248,21 @@ class PrivateTodos(ScheduledTodos):
             "0,5h Garten",
             "Saft machen, Orangen holen",
             "0.5h priv Tech/WS",
-            "Französisch lernen"
+            "Französisch lernen",
         ]
         tomorrow: datetime = datetime.today() + timedelta(days=1)
         self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
                                        checklist=daily_checklist,
                                        days_of_week=[0, 1, 2, 3, 4, 5, 6])
+        monthly_checklist = [
+            "Waschmaschine putzen",
+            "Spúlmaschine putzen",
+            "Dunstabzugshaube",
+            "Mülleimer",
+            "Fensterschränkchen",
+        ]
         self.create_scheduled_reminder(title="Putzen monatlich",
-                                       checklist=["Waschmaschine putzen", "Spúlmaschine putzen", "Dunstabzugshaube"],
+                                       checklist=monthly_checklist,
                                        days_of_month=[1])
         self.create_scheduled_reminder(title="Über Freibeträge Gedanken",
                                        checklist=["Depot", "DKB"],
