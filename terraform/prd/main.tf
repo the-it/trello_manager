@@ -4,7 +4,7 @@ locals {
 
 provider "aws" {
   region = "eu-central-1"
-  profile = "ersotech_aws_prd_1"
+  profile = "ersotech_prd"
 }
 
 terraform {
@@ -12,8 +12,7 @@ terraform {
     bucket = "terraform-shared-state-ersotech-aws-prd-1"
     key = "terraform/trello_manager_state"
     region = "eu-central-1"
-    shared_credentials_file = "~/.aws/creds"
-    profile = "ersotech_aws_prd_1"
+    profile = "ersotech_prd"
   }
 }
 
