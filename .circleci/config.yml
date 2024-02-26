@@ -3,7 +3,7 @@ version: 2.1
 references:
 
 python_image: &python_image
-                cimg/python:3.11
+                cimg/python:3.12
 
 aws_image: &aws_image
              amazon/aws-cli:latest
