@@ -277,7 +277,6 @@ class PrivateTodos(ScheduledTodos):
             "Flaschen wegbringen",
             "Rasen mähen",
             "EbayK",
-            "Küche putzen",
             "Müllbeutel wegbringen",
             "Flaschen reinigen",
             "Lichtschalter + schmale Kanten",
