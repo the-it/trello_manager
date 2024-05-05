@@ -273,6 +273,8 @@ class PrivateTodos(ScheduledTodos):
             "kleines Klo spülen",
             "Seifenschale putzen",
             "Spiegel",
+            "Popo-Dusche",
+            "Badewanne auswischen",
             "Staub wischen",
             "Flaschen wegbringen",
             "Rasen mähen",
