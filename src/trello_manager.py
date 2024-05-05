@@ -276,6 +276,7 @@ class PrivateTodos(ScheduledTodos):
             "Popo-Dusche",
             "Badewanne auswischen",
             "Staub wischen",
+            "Abseite putzen",
             "Flaschen wegbringen",
             "Rasen mähen",
             "EbayK",
