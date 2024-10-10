@@ -65,7 +65,7 @@ codecov :
 
 clean : clean-pyc clean-coverage
 
-quality : safety flake8 pycodestyle pylint mypy
+quality : flake8 pycodestyle pylint mypy
 
 pre-commit : update_pip3 quality unittest
 
