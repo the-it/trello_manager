@@ -1,4 +1,3 @@
-import json
 import os
 import re
 from typing import Optional, Union
@@ -138,9 +137,9 @@ class ReplayDateTask(TrelloManager):
     def _sort_replay(list_to_sort: List):
         print(f"Sorting Cards on board {list_to_sort}")
         cards_with_due = ReplayDateTask.get_cards_with_due(list_to_sort)
-        sorted_cards = sorted(cards_with_due, key=lambda list_card: list_card.due, reverse=True)  # type: ignore
-        for card in sorted_cards:
-            card.set_pos(0)
+        sorted_cards = sorted(cards_with_due, key=lambda list_card: list_card.due)  # type: ignore
+        for position, card in enumerate(sorted_cards):
+            card.set_pos(position)
 
     @staticmethod
     def get_cards_with_due(list_to_sort: List) -> list[Card]:
