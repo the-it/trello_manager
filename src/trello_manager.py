@@ -255,7 +255,6 @@ class PrivateTodos(ScheduledTodos):
                                        checklist=maintenance_checklist,
                                        days_of_month=[10])
         daily_checklist = [
-            "Gesicht waschen, Selbstpflege, Deo",
             "0,5h Garten",
             "Saft machen, Orangen holen",
             "0.5h priv Tech/WS",
