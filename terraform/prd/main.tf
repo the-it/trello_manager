@@ -21,7 +21,7 @@ module "trello_manager" {
     environment = local.project_postfix
     trello_key = var.trello_key
     trello_secret = var.trello_secret
-    cron_schedule = "cron(00 20 * * ? *)"
+    cron_schedule = "cron(00 14 * * ? *)"
 }
 
 output "code_uploader_bucket_name" {

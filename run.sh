@@ -3,7 +3,7 @@
 set -o errexit -o nounset -o pipefail
 
 BASENAME=$(basename "$0")
-CANONICAL_SCRIPT=$(readlink -e "$0")
+CANONICAL_SCRIPT=$(readlink -f "$0")
 SCRIPT_DIR=$(dirname "${CANONICAL_SCRIPT}")
 
 # build stuff
