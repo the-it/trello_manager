@@ -278,27 +278,5 @@ class PrivateTodos(ScheduledTodos):
                                        months_of_year=[11])
 
 
-class WorkTodos(ScheduledTodos):
-    _board_name = "Work"
-
-    def run(self):
-        daily_checklist = [
-            "calendar https://calendar.google.com/calendar/u/0/r",
-            "Board https://github.com/orgs/grafana/projects/146",
-            "plan day",
-            "write down worktime",
-            "Mails https://mail.google.com/mail/u/0/#inbox",
-            "read PR's https://github.com/pulls/review-requested",
-            "Safed Slack Items",
-        ]
-        tomorrow: datetime = datetime.today() + timedelta(days=1)
-        self.create_scheduled_reminder(title=f"DAILYS {tomorrow.strftime('%a')}",
-                                       checklist=daily_checklist,
-                                       days_of_week=[0, 1, 2, 3, 4])
-        self.create_scheduled_reminder(title="DO EXPENSE REPORT",
-                                       checklist=["co-working space", "travel stuff", "other expenses"],
-                                       days_of_month=[1])
-
-
 if __name__ == "__main__":  # pragma: no cover
-    WorkTodos().run()
+    pass

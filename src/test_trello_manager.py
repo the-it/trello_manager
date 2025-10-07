@@ -215,7 +215,7 @@ class TestReplayDateTask(TrelloTest):
         compare("Test_To_Todo_1 (20 d)", todo_cards[3].name)
 
 
-class TestDailyWorkTodos(TrelloTest):
+class TestScheduledTodos(TrelloTest):
     ScheduledTodos._board_name = TEST_BOARD
     ScheduledTodos._key = TEST_KEY
     ScheduledTodos._secret = TEST_SECRET
