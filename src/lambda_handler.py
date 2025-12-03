@@ -11,9 +11,9 @@ def lambda_handler(event, _):  # pylint: disable=unused-argument
             print(f"Current running version is: {version_file.read()}")
     except FileNotFoundError:
         print("Local Development Mode")
-    print("Move the todo cards on the board")
-    ReplayDateTask().run()
+    # print("Move the todo cards on the board")
+    # ReplayDateTask().run()
     print("Get the Shopping Cards from the archive and sort them")
     ShoppingTask().run()
-    print("Create reoccurring Todo Card for Private")
-    PrivateTodos().run()
+    # print("Create reoccurring Todo Card for Private")
+    # PrivateTodos().run()
