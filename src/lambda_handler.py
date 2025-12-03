@@ -1,4 +1,4 @@
-from trello_manager import ReplayDateTask, ShoppingTask, PrivateTodos
+from trello_manager import ShoppingTask
 
 
 def lambda_handler(event, _):  # pylint: disable=unused-argument
