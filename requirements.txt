@@ -26,5 +26,5 @@ requests-oauthlib==2.0.0
     # via py-trello
 six==1.17.0
     # via python-dateutil
-urllib3==2.5.0
+urllib3==2.8.0
     # via requests
