@@ -81,7 +81,7 @@ mypy==1.19.0
     # via -r requirements-dev.in
 mypy-extensions==1.1.0
     # via mypy
-nltk==3.9.2
+nltk==3.10.3
     # via safety
 nose2==0.15.1
     # via -r requirements-dev.in
