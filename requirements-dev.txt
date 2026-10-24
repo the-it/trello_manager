@@ -112,7 +112,7 @@ pylint==4.0.4
     # via -r requirements-dev.in
 python-dateutil==2.9.0.post0
     # via freezegun
-pytz==2025.2
+pytz==2026.5
     # via -r requirements-dev.in
 regex==2025.11.3
     # via nltk
