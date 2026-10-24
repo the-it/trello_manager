@@ -16,7 +16,7 @@ py-trello==0.20.1
     # via -r requirements.in
 python-dateutil==2.9.0.post0
     # via py-trello
-pytz==2025.2
+pytz==2026.5
     # via py-trello
 requests==2.32.5
     # via
