@@ -104,7 +104,7 @@ pydantic==2.12.5
     #   safety-schemas
 pydantic-core==2.41.5
     # via pydantic
-pyflakes==3.4.0
+pyflakes==4.0.3
     # via flake8
 pygments==2.19.2
     # via rich
