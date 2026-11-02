@@ -12,7 +12,7 @@ astroid==4.0.2
     # via pylint
 authlib==1.6.5
     # via safety
-certifi==2025.11.12
+certifi==2026.10.18
     # via
     #   httpcore
     #   httpx
