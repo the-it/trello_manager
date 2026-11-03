@@ -108,7 +108,7 @@ pyflakes==3.4.0
     # via flake8
 pygments==2.19.2
     # via rich
-pylint==4.0.4
+pylint==4.0.9
     # via -r requirements-dev.in
 python-dateutil==2.9.0.post0
     # via freezegun
